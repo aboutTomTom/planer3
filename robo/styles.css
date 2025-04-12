@@ -1,0 +1,1015 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2980b9;
+    --background-color: #f5f7fa;
+    --text-color: #333;
+    --border-color: #ddd;
+    --success-color: #2ecc71;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --light-grey: #f1f1f1;
+    --dark-grey: #555;
+    
+    /* Priorytety */
+    --priority-normal: #e0e0e0;
+    --priority-important: #f5b041;
+    --priority-critical: #e57373;
+    
+    /* Nowe zmienne kolorów */
+    --yellow-cell: var(--warning-color);
+    --green-cell: var(--success-color);
+    --orange-cell: #ff9800;
+    --red-cell: var(--danger-color);
+    --cell-border: #e9e9e9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.2;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1.5px 3.75px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 1.35rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 1.5rem;
+    cursor: pointer;
+    padding: 0.375rem 0.75rem;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+
+nav ul li:hover {
+    background-color: var(--secondary-color);
+}
+
+nav ul li i {
+    margin-right: 0.375rem;
+}
+
+main {
+    max-width: 1800px;
+    margin: 1.5rem auto;
+    padding: 0 0.75rem;
+}
+
+.section {
+    background-color: white;
+    border-radius: 6px;
+    padding: 1.5rem;
+    box-shadow: 0 1.5px 7.5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+}
+
+.hidden {
+    display: none;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.125rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h3 {
+    color: var(--secondary-color);
+    margin-bottom: 0.75rem;
+}
+
+/* Formularz dodawania zadania */
+.form-group {
+    margin-bottom: 1.125rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5625rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+
+.form-group textarea {
+    min-height: 75px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.5625rem 1.125rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.small-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.675rem;
+}
+
+/* Ustawienia wyboru tygodnia */
+.week-selector {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.125rem;
+}
+
+.week-selector button {
+    background-color: var(--light-grey);
+    border: none;
+    padding: 0.375rem 0.75rem;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 0.75rem;
+}
+
+.week-selector button:hover {
+    background-color: var(--border-color);
+}
+
+.week-picker-container {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+#week-picker {
+    padding: 0.375rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: white;
+    text-align: center;
+    max-width: 150px;
+}
+
+#week-dates {
+    display: block;
+    margin-top: 0.375rem;
+    font-size: 0.675rem;
+    color: var(--dark-grey);
+}
+
+/* Filtry */
+.filter-container {
+    display: flex;
+    margin-bottom: 1.125rem;
+    background-color: var(--light-grey);
+    padding: 0.75rem;
+    border-radius: 3px;
+}
+
+.filter-group {
+    margin-right: 1.125rem;
+    display: flex;
+    align-items: center;
+}
+
+.filter-group label {
+    margin-right: 0.375rem;
+    font-weight: bold;
+}
+
+.filter-group select, 
+.filter-group input {
+    padding: 0.375rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+}
+
+.tasks-filter {
+    margin-bottom: 0.75rem;
+}
+
+.tasks-filter input {
+    width: 100%;
+    padding: 0.375rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+}
+
+/* Widok tygodnia */
+.week-view-container {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.schedule-view {
+    flex: 3;
+}
+
+.tasks-list {
+    flex: 1;
+    background-color: var(--light-grey);
+    padding: 0.75rem;
+    border-radius: 6px;
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 3px;
+}
+
+table th, table td {
+    border: 1px solid var(--border-color);
+    padding: 0.5625rem;
+    text-align: left;
+}
+
+table th {
+    background-color: var(--light-grey);
+    font-weight: bold;
+}
+
+#schedule-table th, #schedule-table td {
+    min-width: 112.5px;
+    width: calc((100% - 150px) / 7); /* Stała szerokość komórek */
+}
+
+#schedule-table th:first-child, #schedule-table td:first-child {
+    width: 150px; /* Szerokość kolumny z nazwami osób */
+}
+
+/* Zadania */
+.task-item {
+    padding: 0.5625rem;
+    border-radius: 3px;
+    margin-bottom: 0.5625rem;
+    color: var(--text-color);
+    background-color: white;
+    box-shadow: 0 0.75px 2.25px rgba(0, 0, 0, 0.1);
+    cursor: move;
+}
+
+.priority-normal {
+    background-color: var(--priority-normal);
+    border-left: 3px solid #9e9e9e;
+}
+
+.priority-important {
+    background-color: var(--priority-important);
+    border-left: 3px solid #f39c12;
+}
+
+.priority-critical {
+    background-color: var(--priority-critical);
+    border-left: 3px solid #c0392b;
+}
+
+.task-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.375rem;
+}
+
+.task-item-title {
+    font-weight: bold;
+}
+
+.task-item-time {
+    font-size: 0.675rem;
+    color: var(--dark-grey);
+}
+
+.task-item-details {
+    font-size: 0.675rem;
+}
+
+/* Komórki harmonogramu */
+.schedule-cell {
+    min-height: 90px;
+    padding: 0.375rem;
+    border: 1.5px solid var(--cell-border);
+    transition: border-color 0.3s;
+    position: relative;
+}
+
+.schedule-cell.drop-target {
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+.schedule-cell-time {
+    position: absolute;
+    bottom: 3.75px;
+    right: 3.75px;
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: var(--dark-grey);
+}
+
+/* Kolory obramowań komórek */
+.time-yellow {
+    border-color: var(--yellow-cell);
+}
+
+.time-green {
+    border-color: var(--green-cell);
+}
+
+.time-orange {
+    border-color: var(--orange-cell);
+}
+
+.time-red {
+    border-color: var(--red-cell);
+}
+
+/* Wypełnienie czasu */
+.time-fill {
+    height: 3.75px;
+    background-color: var(--primary-color);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+/* Selektor kolorów */
+.color-picker-wrapper {
+    margin-top: 0.375rem;
+    display: flex;
+    align-items: center;
+}
+
+.color-picker-wrapper label {
+    margin-right: 0.375rem;
+}
+
+.color-picker {
+    width: 22.5px;
+    height: 22.5px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.settings-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.settings-control input {
+    width: 75px;
+    margin-right: 0.75rem;
+}
+
+/* Ustawienia */
+.settings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.settings-group {
+    background-color: var(--light-grey);
+    padding: 1.125rem;
+    border-radius: 6px;
+}
+
+.users-list, .departments-list {
+    margin-bottom: 1.125rem;
+    max-height: 225px;
+    overflow-y: auto;
+}
+
+/* Okna modalne */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 7.5% auto;
+    padding: 1.5rem;
+    border-radius: 6px;
+    width: 80%;
+    max-width: 450px;
+    position: relative;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    position: absolute;
+    top: 0.75rem;
+    right: 1.125rem;
+    font-size: 1.125rem;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 0.5625rem 1.125rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: background-color 0.3s;
+    margin-left: 0.75rem;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 0.75rem;
+}
+
+.task-detail-header {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 3px;
+}
+
+.task-detail-body {
+    margin-bottom: 1.125rem;
+}
+
+.task-detail-body p {
+    margin-bottom: 0.375rem;
+}
+
+.task-detail-footer {
+    margin-top: 1.125rem;
+    text-align: right;
+}
+
+/* Tabela działów */
+.department-color-cell {
+    display: flex;
+    align-items: center;
+}
+
+.color-preview {
+    width: 15px;
+    height: 15px;
+    border-radius: 2.25px;
+    margin-right: 7.5px;
+    display: inline-block;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding: 0.75rem;
+    }
+    
+    nav ul {
+        margin-top: 0.75rem;
+        flex-wrap: wrap;
+    }
+    
+    nav ul li {
+        margin: 0.375rem;
+    }
+    
+    .week-view-container {
+        flex-direction: column;
+    }
+    
+    .settings-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Interaktywna oś czasu */
+.time-thresholds-container {
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.time-axis-container {
+    margin-top: 0.75rem;
+}
+
+.time-axis {
+    position: relative;
+    padding: 1.5rem 0;
+}
+
+.time-axis-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+}
+
+.time-axis-labels span {
+    font-size: 0.675rem;
+    color: var(--dark-grey);
+}
+
+.time-axis-line {
+    position: relative;
+    height: 0.375rem;
+    background-color: #eee;
+    border-radius: 3px;
+}
+
+.time-threshold {
+    position: absolute;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1.5px solid var(--primary-color);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    z-index: 5;
+}
+
+.time-threshold:hover {
+    box-shadow: 0 0 0 0.375rem rgba(52, 152, 219, 0.2);
+}
+
+.time-threshold:active {
+    cursor: grabbing;
+}
+
+#yellow-threshold-point {
+    border-color: var(--yellow-cell);
+    left: 30%;
+}
+
+#green-min-threshold-point {
+    border-color: var(--green-cell);
+    left: 40%;
+}
+
+#green-max-threshold-point {
+    border-color: var(--green-cell);
+    left: 50%;
+}
+
+#orange-min-threshold-point {
+    border-color: var(--orange-cell);
+    left: 60%;
+}
+
+#orange-max-threshold-point {
+    border-color: var(--orange-cell);
+    left: 70%;
+}
+
+.time-axis-zones {
+    position: absolute;
+    height: 0.375rem;
+    width: 100%;
+    top: 1.5rem;
+}
+
+.time-zone {
+    position: absolute;
+    height: 100%;
+    top: 0;
+}
+
+.time-zone-yellow {
+    background-color: var(--yellow-cell);
+    left: 0;
+    width: 40%;
+}
+
+.time-zone-green {
+    background-color: var(--green-cell);
+    left: 40%;
+    width: 20%;
+}
+
+.time-zone-orange {
+    background-color: var(--orange-cell);
+    left: 60%;
+    width: 20%;
+}
+
+.time-zone-red {
+    background-color: var(--red-cell);
+    left: 80%;
+    width: 20%;
+}
+
+.time-thresholds-colors {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.125rem;
+}
+
+.color-preview-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.color-preview-item .color-preview {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 3px;
+    margin-bottom: 0.375rem;
+}
+
+.color-preview-item span {
+    font-size: 0.675rem;
+    color: var(--dark-grey);
+}
+
+#yellow-color-preview {
+    background-color: var(--yellow-cell);
+}
+
+#green-color-preview {
+    background-color: var(--green-cell);
+}
+
+#orange-color-preview {
+    background-color: var(--orange-cell);
+}
+
+#red-color-preview {
+    background-color: var(--red-cell);
+}
+
+/* Dropdown dla wyboru dni tygodnia */
+.days-selector {
+    position: relative;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    background-color: white;
+    padding: 0.5625rem 1.125rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    text-align: left;
+    width: 100%;
+    min-width: 13.5rem;
+}
+
+.dropdown-toggle i {
+    float: right;
+    margin-top: 0.225rem;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 13.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    box-shadow: 0 0.75px 3.75px rgba(0,0,0,0.1);
+    z-index: 10;
+    padding: 0.5625rem 0;
+    max-height: 18.75rem;
+    overflow-y: auto;
+    margin-top: 0.375rem;
+}
+
+.dropdown-content label {
+    display: block;
+    padding: 0.5625rem 1.125rem;
+    cursor: pointer;
+    font-weight: normal;
+    font-size: 0.75rem;
+}
+
+.dropdown-content label:hover {
+    background-color: var(--light-grey);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content input[type="checkbox"] {
+    margin-right: 0.5625rem;
+}
+
+/* Style dla funkcji podziału zadań */
+.task-split-button {
+    position: absolute;
+    top: 0.375rem;
+    right: 0.375rem;
+    width: 1.125rem;
+    height: 1.125rem;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    z-index: 5;
+}
+
+.task-split-button:hover {
+    opacity: 1;
+}
+
+.task-item:hover .task-split-button {
+    display: flex;
+}
+
+.task-item .task-resize-handle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    cursor: ew-resize;
+    opacity: 0.5;
+}
+
+.task-item:hover .task-resize-handle {
+    opacity: 1;
+}
+
+.task-item.multi-day {
+    position: relative;
+    overflow: visible;
+}
+
+.task-item.multi-day::after {
+    content: '';
+    position: absolute;
+    right: -0.375rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: inherit;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* Nowy układ ustawień w dwóch kolumnach */
+.settings-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+}
+
+.settings-container .settings-group:first-child {
+    grid-column: span 3;
+}
+
+/* Styl dla przypisanych zadań - nieprzecięgalnych */
+.assigned-task {
+    cursor: default;
+    position: relative;
+}
+
+.assigned-task::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 15px;
+    height: 15px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Styl dla przypisanych zadań gdy są wielodniowe */
+.assigned-task.multi-day {
+    margin-bottom: 5px;
+    z-index: 2;
+}
+
+/* Styl dla podpowiedzi o usuwaniu przypisania */
+.remove-assignment-hint {
+    display: none;
+    color: #999;
+    font-size: 0.7em;
+    margin-top: 2px;
+    font-style: italic;
+}
+
+.assigned-task:hover .remove-assignment-hint {
+    display: block;
+}
+
+/* Style dla powiadomienia offline */
+.offline-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #ff9800;
+    color: white;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+    transform: translateY(150%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 9999;
+}
+
+.offline-notification.show {
+    transform: translateY(0);
+}
+
+.offline-icon {
+    margin-right: 12px;
+    font-size: 24px;
+}
+
+.offline-content {
+    flex-grow: 1;
+}
+
+.offline-message {
+    margin: 0 0 4px 0;
+    font-weight: bold;
+}
+
+.offline-description {
+    margin: 0;
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.offline-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+}
+
+.offline-close:hover {
+    opacity: 0.8;
+}
+
+/* Style dla powiadomienia offline */
+#offline-notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #f44336;
+    color: white;
+    padding: 12px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+#offline-notification .notification-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+#offline-notification .notification-icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+#offline-notification .notification-title {
+    font-weight: bold;
+    flex-grow: 1;
+    font-size: 16px;
+}
+
+#offline-notification .notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+#offline-notification .notification-description {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Style dla funkcji dzielenia zadań */
+.split-task-days-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.split-task-day {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border-left: 3px solid #2196F3;
+}
+
+.split-task-day label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.split-task-day input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.split-task-day input[type="number"] {
+    width: 70px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.split-task-day.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.split-task-hours-info {
+    margin-top: 10px;
+    padding: 8px;
+    background-color: #eaf7ff;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.split-error {
+    color: #ff3333;
+    margin-top: 5px;
+} 

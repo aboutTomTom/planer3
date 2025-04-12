@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Użytkownik aplikacji
+model User {
+  id                Int                @id @default(autoincrement())
+  name              String
+  email             String             @unique
+  password          String
+  role              UserRole           @default(EDITOR)
+  departmentId      Int?
+  department        Department?        @relation(fields: [departmentId], references: [id])
+  assignedTasks     Task[]             @relation("AssignedTo")
+  createdTasks      Task[]             @relation("CreatedBy")
+  harmonogramBlocks HarmonogramBlock[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+// Role użytkowników
+enum UserRole {
+  ADMIN // Pełne uprawnienia
+  EDITOR // Może edytować dane
+  VIEWER // Tylko podgląd
+}
+
+// Dział w firmie
+model Department {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  color     String   @default("#808080") // Kolor domyślny - szary
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Klient
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String
+  brands    Brand[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Marka klienta
+model Brand {
+  id        Int      @id @default(autoincrement())
+  name      String
+  clientId  Int
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, clientId])
+}
+
+// Zadanie
+model Task {
+  id                Int                @id @default(autoincrement())
+  title             String
+  description       String?
+  priority          Int                @default(2) // 1-3, gdzie 1 najważniejsze
+  estimatedTime     Float // Czas w godzinach
+  brandId           Int
+  brand             Brand              @relation(fields: [brandId], references: [id])
+  createdById       Int
+  createdBy         User               @relation("CreatedBy", fields: [createdById], references: [id])
+  assignedToId      Int?
+  assignedTo        User?              @relation("AssignedTo", fields: [assignedToId], references: [id])
+  expiryDate        DateTime? // Data ważności zadania
+  notes             String?
+  links             String?
+  harmonogramBlocks HarmonogramBlock[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+}
+
+// Blok harmonogramu (zadanie przydzielone do konkretnego dnia)
+model HarmonogramBlock {
+  id            Int       @id @default(autoincrement())
+  taskId        Int
+  task          Task      @relation(fields: [taskId], references: [id])
+  userId        Int
+  user          User      @relation(fields: [userId], references: [id])
+  date          DateTime
+  allocatedTime Float // Czas przydzielony do danego dnia
+  isLocked      Boolean   @default(false)
+  lockedUntil   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([taskId, userId, date])
+}
+
+// Ustawienia aplikacji (klucz-wartość)
+model Settings {
+  key       String   @id
+  value     String // Wartość jako JSON string
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}

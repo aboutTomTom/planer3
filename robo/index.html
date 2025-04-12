@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planer - Zarządzanie zespołem</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css">
+</head>
+<body>
+    <!-- Offline notification -->
+    <div id="offline-notification">
+        <div class="notification-header">
+            <div class="notification-icon">
+                <i class="fas fa-wifi"></i>
+            </div>
+            <div class="notification-title">Tryb offline</div>
+            <button class="notification-close" onclick="hideOfflineNotification()">×</button>
+        </div>
+        <div class="notification-description">
+            Utracono połączenie z internetem. Twoje zmiany zostaną zapisane lokalnie i zsynchronizowane, gdy połączenie zostanie przywrócone.
+        </div>
+    </div>
+
+    <header>
+        <h1>Planer Zespołu</h1>
+        <nav>
+            <ul>
+                <li id="add-task-btn"><i class="fas fa-plus"></i> Dodaj zadanie</li>
+                <li id="select-week-btn"><i class="fas fa-calendar-week"></i> Wybór tygodnia</li>
+                <li id="settings-btn"><i class="fas fa-cog"></i> Ustawienia</li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Dodaj zadanie -->
+        <section id="add-task-section" class="section">
+            <h2>Dodaj nowe zadanie</h2>
+            <form id="add-task-form">
+                <div class="form-group">
+                    <label for="priority">Priorytet:</label>
+                    <select id="priority" name="priority" required>
+                        <option value="3">Normalny</option>
+                        <option value="2">Ważny</option>
+                        <option value="1">Najważniejszy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="client">Klient:</label>
+                    <input type="text" id="client" name="client" required>
+                </div>
+                <div class="form-group">
+                    <label for="brand">Marka:</label>
+                    <input type="text" id="brand" name="brand" required>
+                </div>
+                <div class="form-group">
+                    <label for="task">Zlecenie:</label>
+                    <input type="text" id="task" name="task" required>
+                </div>
+                <div class="form-group">
+                    <label for="account">Account:</label>
+                    <select id="account" name="account" required>
+                        <option value="">Wybierz account</option>
+                        <!-- Options będą dodane dynamicznie z JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="leader">Leader:</label>
+                    <select id="leader" name="leader" required>
+                        <option value="">Wybierz leadera</option>
+                        <!-- Options będą dodane dynamicznie z JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="estimated-time">Czas przewidywany (h):</label>
+                    <input type="number" id="estimated-time" name="estimated-time" min="0.5" step="0.5" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notatki:</label>
+                    <textarea id="notes" name="notes"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="links">Linki:</label>
+                    <textarea id="links" name="links"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Zapisz zadanie</button>
+            </form>
+        </section>
+
+        <!-- Wybór tygodnia -->
+        <section id="week-view-section" class="section hidden">
+            <div class="week-selector">
+                <button id="prev-week"><i class="fas fa-chevron-left"></i></button>
+                <div class="week-picker-container">
+                    <input type="text" id="week-picker" placeholder="Wybierz tydzień...">
+                    <span id="current-week">Tydzień: <span id="week-number"></span></span>
+                    <span id="week-dates"></span>
+                </div>
+                <button id="next-week"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="filter-container">
+                <div class="filter-group">
+                    <label for="filter-department">Filtruj dział:</label>
+                    <select id="filter-department">
+                        <option value="">Wszystkie działy</option>
+                        <!-- Options będą dodane dynamicznie z JS -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-user">Filtruj osobę:</label>
+                    <select id="filter-user">
+                        <option value="">Wszyscy użytkownicy</option>
+                        <!-- Options będą dodane dynamicznie z JS -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button id="clear-filters" class="submit-btn small-btn">Wyczyść filtry</button>
+                </div>
+            </div>
+            
+            <div class="week-view-container">
+                <div class="schedule-view">
+                    <table id="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Osoba</th>
+                                <!-- Dni tygodnia będą dodawane dynamicznie -->
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-body">
+                            <!-- Wiersze pracowników będą dodawane dynamicznie -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="tasks-list">
+                    <h3>Dostępne zadania</h3>
+                    <div class="tasks-filter">
+                        <input type="text" id="task-search" placeholder="Szukaj zadań...">
+                    </div>
+                    <div id="available-tasks" class="task-container">
+                        <!-- Zadania będą dodawane dynamicznie -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ustawienia -->
+        <section id="settings-section" class="section hidden">
+            <h2>Ustawienia</h2>
+            
+            <div class="settings-container">
+                <div class="settings-group">
+                    <h3>Ustawienia czasu i kolorów</h3>
+                    
+                    <!-- Interaktywna oś czasu z progami -->
+                    <div class="time-thresholds-container">
+                        <h4>Progi czasowe - oś godzin:</h4>
+                        <div class="time-axis-container">
+                            <div class="time-axis">
+                                <div class="time-axis-labels">
+                                    <span>0h</span>
+                                    <span>2h</span>
+                                    <span>4h</span>
+                                    <span>6h</span>
+                                    <span>8h</span>
+                                    <span>10h</span>
+                                    <span>12h</span>
+                                </div>
+                                <div class="time-axis-line">
+                                    <div class="time-threshold" id="yellow-threshold-point" data-threshold="yellow" title="Próg żółty"></div>
+                                    <div class="time-threshold" id="green-min-threshold-point" data-threshold="green-min" title="Próg zielony min"></div>
+                                    <div class="time-threshold" id="green-max-threshold-point" data-threshold="green-max" title="Próg zielony max"></div>
+                                    <div class="time-threshold" id="orange-min-threshold-point" data-threshold="orange-min" title="Próg pomarańczowy min"></div>
+                                    <div class="time-threshold" id="orange-max-threshold-point" data-threshold="orange-max" title="Próg pomarańczowy max"></div>
+                                </div>
+                                <div class="time-axis-zones">
+                                    <div class="time-zone time-zone-yellow" id="zone-yellow"></div>
+                                    <div class="time-zone time-zone-green" id="zone-green"></div>
+                                    <div class="time-zone time-zone-orange" id="zone-orange"></div>
+                                    <div class="time-zone time-zone-red" id="zone-red"></div>
+                                </div>
+                            </div>
+                            <div class="time-thresholds-colors">
+                                <div class="color-preview-item">
+                                    <div id="yellow-color-preview" class="color-preview"></div>
+                                    <span>Żółty</span>
+                                </div>
+                                <div class="color-preview-item">
+                                    <div id="green-color-preview" class="color-preview"></div>
+                                    <span>Zielony</span>
+                                </div>
+                                <div class="color-preview-item">
+                                    <div id="orange-color-preview" class="color-preview"></div>
+                                    <span>Pomarańczowy</span>
+                                </div>
+                                <div class="color-preview-item">
+                                    <div id="red-color-preview" class="color-preview"></div>
+                                    <span>Czerwony</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="time-settings-form">
+                        <div class="form-group">
+                            <label for="yellow-threshold">Próg żółty (h):</label>
+                            <div class="settings-control">
+                                <input type="number" id="yellow-threshold" value="4" min="0" step="0.5">
+                                <div class="color-picker-wrapper">
+                                    <label>Kolor:</label>
+                                    <div id="yellow-color-picker" class="color-picker"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="green-threshold-min">Próg zielony min (h):</label>
+                            <div class="settings-control">
+                                <input type="number" id="green-threshold-min" value="4" min="0" step="0.5">
+                                <div class="color-picker-wrapper">
+                                    <label>Kolor:</label>
+                                    <div id="green-color-picker" class="color-picker"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="green-threshold-max">Próg zielony max (h):</label>
+                            <div class="settings-control">
+                                <input type="number" id="green-threshold-max" value="6" min="0" step="0.5">
+                                <div class="color-picker-wrapper">
+                                    <label>Kolor:</label>
+                                    <div id="green-max-color-picker" class="color-picker"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="orange-threshold-min">Próg pomarańczowy min (h):</label>
+                            <div class="settings-control">
+                                <input type="number" id="orange-threshold-min" value="6" min="0" step="0.5">
+                                <div class="color-picker-wrapper">
+                                    <label>Kolor:</label>
+                                    <div id="orange-color-picker" class="color-picker"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="orange-threshold-max">Próg pomarańczowy max (h):</label>
+                            <div class="settings-control">
+                                <input type="number" id="orange-threshold-max" value="8" min="0" step="0.5">
+                                <div class="color-picker-wrapper">
+                                    <label>Kolor:</label>
+                                    <div id="orange-max-color-picker" class="color-picker"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="red-color-picker">Kolor czerwony (powyżej progu):</label>
+                            <div class="color-picker-wrapper">
+                                <div id="red-color-picker" class="color-picker"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Widok dni tygodnia:</label>
+                            <div class="days-selector">
+                                <div class="dropdown">
+                                    <button type="button" class="dropdown-toggle">Wybierz dni tygodnia <i class="fas fa-caret-down"></i></button>
+                                    <div class="dropdown-content">
+                                        <label><input type="checkbox" name="weekday" value="1" checked> Poniedziałek</label>
+                                        <label><input type="checkbox" name="weekday" value="2" checked> Wtorek</label>
+                                        <label><input type="checkbox" name="weekday" value="3" checked> Środa</label>
+                                        <label><input type="checkbox" name="weekday" value="4" checked> Czwartek</label>
+                                        <label><input type="checkbox" name="weekday" value="5" checked> Piątek</label>
+                                        <label><input type="checkbox" name="weekday" value="6"> Sobota</label>
+                                        <label><input type="checkbox" name="weekday" value="7"> Niedziela</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Zapisz ustawienia</button>
+                    </form>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Zarządzanie działami</h3>
+                    <div class="departments-list">
+                        <table id="departments-table">
+                            <thead>
+                                <tr>
+                                    <th>Nazwa działu</th>
+                                    <th>Kolor</th>
+                                    <th>Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="departments-list-body">
+                                <!-- Działy będą dodawane dynamicznie -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <form id="add-department-form">
+                        <h4>Dodaj dział</h4>
+                        <div class="form-group">
+                            <label for="department-name">Nazwa działu:</label>
+                            <input type="text" id="department-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department-color">Kolor działu:</label>
+                            <div id="department-color-picker" class="color-picker"></div>
+                        </div>
+                        <button type="submit" class="submit-btn">Dodaj dział</button>
+                    </form>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Zarządzanie użytkownikami</h3>
+                    <div class="users-list">
+                        <table id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Imię i nazwisko</th>
+                                    <th>Dział</th>
+                                    <th>Uprawnienia</th>
+                                    <th>Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-list-body">
+                                <!-- Użytkownicy będą dodawani dynamicznie -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <form id="add-user-form">
+                        <h4>Dodaj użytkownika</h4>
+                        <div class="form-group">
+                            <label for="user-name">Imię i nazwisko:</label>
+                            <input type="text" id="user-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-department">Dział:</label>
+                            <select id="user-department" required>
+                                <option value="">Wybierz dział</option>
+                                <!-- Options będą dodane dynamicznie z JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-permission">Uprawnienia:</label>
+                            <select id="user-permission" required>
+                                <option value="admin">Pełne uprawnienia</option>
+                                <option value="editor" selected>Edycja własnych zadań</option>
+                                <option value="viewer">Tylko przeglądanie</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Dodaj użytkownika</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modalne okna -->
+    <div id="task-edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edytuj zadanie</h3>
+            <form id="edit-task-form">
+                <!-- Pola formularza będą generowane dynamicznie -->
+            </form>
+        </div>
+    </div>
+
+    <div id="task-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Szczegóły zadania</h3>
+            <div id="task-details">
+                <!-- Szczegóły zadania będą generowane dynamicznie -->
+            </div>
+        </div>
+    </div>
+    
+    <div id="department-edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edytuj dział</h3>
+            <form id="edit-department-form">
+                <div class="form-group">
+                    <label for="edit-department-name">Nazwa działu:</label>
+                    <input type="text" id="edit-department-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-department-color">Kolor działu:</label>
+                    <div id="edit-department-color-picker" class="color-picker"></div>
+                </div>
+                <button type="submit" class="submit-btn">Zapisz zmiany</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal do dzielenia zadania na kilka dni -->
+    <div class="modal" id="splitTaskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Podziel zadanie na dni</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <!-- Zawartość będzie generowana dynamicznie przez funkcję initSplitTaskModal -->
+            </div>
+            <div class="modal-footer">
+                <button class="confirm-btn">Potwierdź podział</button>
+                <button class="cancel-btn">Anuluj</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skrypty bibliotek -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 

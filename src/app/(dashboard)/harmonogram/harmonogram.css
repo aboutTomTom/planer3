@@ -1,0 +1,269 @@
+/* Globalne style dla strony harmonogramu */
+
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2980b9;
+  --background-color: #f5f7fa;
+  --text-color: #444;
+  --border-color: #ddd;
+  --success-color: #2ecc71;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --light-grey: #f8f9fa;
+  --dark-grey: #555;
+  
+  /* Priorytety */
+  --priority-high: #e57373;
+  --priority-medium: #f5b041;
+  --priority-low: #7bd48d;
+}
+
+.bg-background-color {
+  background-color: var(--background-color);
+}
+
+.text-primary-color {
+  color: var(--primary-color);
+}
+
+/* Zapobieganie zaznaczaniu tekstu w elementach przeciąganych */
+.draggable-item, 
+.dnd-draggable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Styl kursora dla elementów przeciąganych */
+[data-draggable="true"] {
+  cursor: grab;
+}
+
+[data-draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* Płynniejsze animacje dla elementów drag and drop */
+.draggable-transition {
+  transition: transform 0.12s ease, opacity 0.12s ease, box-shadow 0.18s ease-in-out !important;
+}
+
+/* Kompaktowe style dla komponentów */
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-size: 0.75rem !important;
+  line-height: 1.2 !important;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  table-layout: fixed;
+}
+
+th, td {
+  padding: 0 !important;
+  border: none;
+}
+
+thead {
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #eaedf2;
+}
+
+th {
+  font-weight: 600;
+  color: #5a6273;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+  padding: 0.25rem 0.5rem !important;
+}
+
+/* Style dla komórek tabeli z zadaniami */
+.schedule-cell {
+  transition: background-color 0.2s ease;
+  border-right: 1px solid #f0f3f8;
+  border-bottom: 1px solid #f0f3f8;
+  position: relative;
+  min-height: 30px !important;
+  padding: 8px 4px 4px 4px !important;
+}
+
+.today-cell {
+  background-color: rgba(52, 152, 219, 0.03);
+  border-left: 1px dashed rgba(52, 152, 219, 0.3);
+  border-right: 1px dashed rgba(52, 152, 219, 0.3);
+}
+
+td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 10;
+  border-right: 1px solid #e5e9f2;
+  font-weight: 500;
+  color: #2c3e50;
+  padding: 0.25rem 0.5rem !important;
+}
+
+/* Style dla droppable cells */
+.min-h-16 {
+  min-height: 3rem !important;
+}
+
+/* Style dla liczników czasu */
+.schedule-cell-time {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 3px;
+  border-radius: 3px;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  z-index: 20;
+}
+
+/* Tła dla liczników czasu */
+.bg-green-500 {
+  background-color: var(--success-color) !important;
+}
+
+.bg-yellow-500 {
+  background-color: var(--warning-color) !important;
+}
+
+.bg-orange-500 {
+  background-color: #ff9800 !important;
+}
+
+.bg-red-500 {
+  background-color: var(--danger-color) !important;
+}
+
+.bg-gray-200 {
+  background-color: #e2e8f0 !important;
+  color: #4b5563 !important;
+}
+
+/* Czyste kolory w stylu priorytetu */
+.priority-high, .priority-1 {
+  color: var(--priority-high);
+}
+
+.priority-medium, .priority-2 {
+  color: var(--priority-medium);
+}
+
+.priority-low, .priority-3 {
+  color: var(--priority-low);
+}
+
+/* Stylizacja nagłówka */
+.text-base {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Panel z nieprzypisanymi zadaniami */
+.bg-white {
+  background-color: white;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Poprawki dla pełnej szerokości ekranu */
+.w-full {
+  width: 100%;
+}
+
+/* Stały układ tabeli */
+.w-36 {
+  width: 9rem !important;
+}
+
+.w-28 {
+  width: 7rem !important;
+}
+
+/* Panel boczny - zachowanie rozmiaru */
+@media (min-width: 1024px) {
+  .lg\:w-4\/5 {
+    width: 80%;
+  }
+  
+  .lg\:w-1\/5 {
+    width: 20%;
+  }
+}
+
+/* Poprawki dla responsywności layoutu */
+@media (max-width: 768px) {
+  td:first-child {
+    position: static;
+  }
+  
+  .overflow-x-auto {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.no-cursor-events {
+  pointer-events: none;
+}
+
+.cursor-events-all {
+  pointer-events: all;
+}
+
+/* Subtelne style dla komórek i zadań */
+.draggable-item {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  line-height: 1.2;
+  border-left-width: 3px !important;
+  background-image: linear-gradient(to right, rgba(255,255,255,0.8), rgba(255,255,255,1));
+  margin: 0 !important;
+}
+
+.draggable-item:hover {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+}
+
+/* Piękne stylizacje dla stanów hover */
+.hover\:bg-gray-50:hover {
+  background-color: rgba(249, 250, 251, 0.7) !important;
+}
+
+.hover\:shadow-md:hover {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06) !important;
+}
+
+/* Stylizacja nagłówków dni tygodnia */
+thead th:not(:first-child) {
+  text-align: center;
+  position: relative;
+  border-right: 1px solid #f0f3f8;
+}
+
+thead th.today {
+  background-color: rgba(52, 152, 219, 0.08);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+thead th.today:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+  height: 2px;
+  background-color: var(--primary-color);
+} 
