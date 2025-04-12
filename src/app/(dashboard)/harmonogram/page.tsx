@@ -5,6 +5,7 @@ import { format, addWeeks, subWeeks, startOfWeek, addDays, isToday } from 'date-
 import { pl } from 'date-fns/locale';
 import { FaArrowLeft, FaArrowRight, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 import { useAppConfig } from '@/lib/context/AppConfigContext';
+import { useLoading } from '@/lib/context/LoadingContext';
 import { 
   DndContext, 
   DragOverlay, 
@@ -254,6 +255,7 @@ export default function HarmonogramPage() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [isWeekPickerOpen, setIsWeekPickerOpen] = useState(false);
   const { config } = useAppConfig();
+  const { startLoading, stopLoading } = useLoading();
   const { displayedDays } = config;
   
   // Stany dla drag & drop
@@ -333,6 +335,8 @@ export default function HarmonogramPage() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
+      startLoading(); // Ustaw globalny stan ładowania
+      
       try {
         // Pobieranie użytkowników
         const usersResponse = await fetch('/api/users');
@@ -399,11 +403,12 @@ export default function HarmonogramPage() {
         ]);
       } finally {
         setIsLoading(false);
+        stopLoading(); // Zakończ globalny stan ładowania
       }
     };
     
     fetchData();
-  }, [currentWeek, weekStart]); 
+  }, [currentWeek, weekStart, startLoading, stopLoading]); 
 
   // Filtrowanie użytkowników wg działu
   const filteredUsers = useMemo(() => {

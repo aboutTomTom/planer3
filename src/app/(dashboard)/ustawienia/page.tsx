@@ -8,6 +8,7 @@ import { HexColorPicker } from 'react-colorful';
 import { clsx } from 'clsx';
 import TimeThresholdSlider from '@/components/TimeThresholdSlider';
 import DaysSelector from '@/components/DaysSelector';
+import { useLoading } from '@/lib/context/LoadingContext';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -23,6 +24,7 @@ interface Toast {
 
 export default function UstawieniaPage() {
   const { config, updateTimeThresholds, updateDisplayedDays, reloadConfig } = useAppConfig();
+  const { startLoading, stopLoading } = useLoading();
   const [activeTab, setActiveTab] = useState(0);
   const [timeThresholds, setTimeThresholds] = useState(config.timeThresholds);
   const [displayedDays, setDisplayedDays] = useState(config.displayedDays);
@@ -31,11 +33,23 @@ export default function UstawieniaPage() {
   // System powiadomień
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Aktualizuj lokalny stan, gdy zmienia się konfiguracja
+  // Inicjalizacja komponentu
   useEffect(() => {
-    setTimeThresholds(config.timeThresholds);
-    setDisplayedDays(config.displayedDays);
-  }, [config]);
+    // Oznacz rozpoczęcie ładowania 
+    startLoading();
+    
+    // Symulujemy, że inicjalizacja zajmuje chwilę 
+    const timeout = setTimeout(() => {
+      // Zaktualizuj stany lokalne z konfiguracji
+      setTimeThresholds(config.timeThresholds);
+      setDisplayedDays(config.displayedDays);
+      
+      // Oznacz zakończenie ładowania po aktualizacji stanów
+      stopLoading();
+    }, 300);
+    
+    return () => clearTimeout(timeout);
+  }, [config, startLoading, stopLoading]);
 
   // Funkcja do wyświetlania powiadomień
   const showToast = (message: string, type: ToastType) => {
