@@ -289,9 +289,9 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
   return (
     <div className="time-threshold-slider-wrapper">
       <div className="time-threshold-slider">
-        <div className="container">
-          <div className="box zero">0</div>
-          <div className="battonbar" id="battonbar" ref={battonbarRef}>
+        <div className="slider-container">
+          <div className="slider-end zero">0</div>
+          <div className="slider-track" id="battonbar" ref={battonbarRef}>
             <button 
               className="segment low" 
               style={{ 
@@ -306,7 +306,7 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
             </button>
             
             <div 
-              className="box s1" 
+              className="slider-handle s1" 
               id="s1"
               style={{ left: `calc((${sliderValues[0]} / ${currentScale}) * 100%)` }}
               onMouseDown={startDrag(0)}
@@ -330,7 +330,7 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
             </button>
             
             <div 
-              className="box s2" 
+              className="slider-handle s2" 
               id="s2"
               style={{ left: `calc((${sliderValues[1]} / ${currentScale}) * 100%)` }}
               onMouseDown={startDrag(1)}
@@ -354,7 +354,7 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
             </button>
             
             <div 
-              className="box s3" 
+              className="slider-handle s3" 
               id="s3"
               style={{ left: `calc((${sliderValues[2]} / ${currentScale}) * 100%)` }}
               onMouseDown={startDrag(2)}
@@ -377,8 +377,12 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
               <span className="short">K</span>
             </button>
           </div>
-          <div className="box max">MAX</div>
+          <div className="slider-end max">MAX</div>
         </div>
+      </div>
+      
+      <div className="instruction-text">
+        Przeciągnij suwaki, aby ustawić progi czasowe. Kliknij w kolorowy segment, aby zmienić jego kolor.
       </div>
       
       {/* Picker kolorów pojawia się po kliknięciu w segment */}
@@ -419,10 +423,6 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
         </div>
       )}
       
-      <div className="instruction-text">
-        Przeciągnij suwaki, aby ustawić progi czasowe. Kliknij w kolorowy segment, aby zmienić jego kolor.
-      </div>
-      
       <style jsx>{`
         .time-threshold-slider-wrapper {
           position: relative;
@@ -438,11 +438,11 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
           align-items: center;
           justify-content: center;
           height: 100%;
-          padding-top: 25px;
-          padding-bottom: 25px;
+          padding-top: 5px;
+          padding-bottom: 5px;
         }
         
-        .container {
+        .slider-container {
           display: flex;
           width: 100%;
           justify-content: space-between;
@@ -451,33 +451,37 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
           align-items: center;
         }
         
-        .box {
+        .slider-end {
           height: 19px;
           display: flex;
           justify-content: center;
           align-items: center;
-          font-weight: bold;
+          font-weight: normal;
           border-radius: 5px;
           font-size: 0.75rem;
-        }
-        
-        .zero { 
-          background-color: #d0d0d0; 
+          background-color: #f5f5f5;
+          border: 2px solid #e0e0e0;
           width: 60px;
           flex-shrink: 0;
+          color: #666;
+          padding-top: 20px;
+          padding-bottom: 20px;
         }
         
-        .battonbar {
+        .slider-track {
           display: flex;
           flex-grow: 1;
           width: calc(100% - 120px);
           position: relative;
-          background-color: #eee;
-          height: 19px;
+          background-color: #f5f5f5;
+          height: 44px;
           border-radius: 5px;
+          margin: 0 2px;
+          padding-top: 0;
+          padding-bottom: 0;
         }
         
-        .s1, .s2, .s3 {
+        .slider-handle {
           width: 35px;
           height: 19px;
           flex-shrink: 0;
@@ -487,19 +491,24 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
           cursor: move;
           user-select: none;
           touch-action: none;
-          background-color: #007bff;
+          background-color: #1890ff;
           transform: translateX(-50%);
           border-radius: 5px;
           font-size: 0.75rem;
           color: white;
-        }
-        
-        .segment {
-          flex-grow: 1;
           display: flex;
           justify-content: center;
           align-items: center;
-          font-weight: bold;
+          border: 2px solid rgba(0, 0, 0, 0.1);
+          padding-top: 20px;
+          padding-bottom: 20px;
+        }
+        
+        .segment {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: normal;
           position: absolute;
           height: 19px;
           z-index: 5;
@@ -508,13 +517,14 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
           white-space: nowrap;
           border-radius: 5px;
           font-size: 0.75rem;
-          padding: 0;
+          padding: 20px 0;
           margin: 0;
-          border: none;
+          border: 2px solid rgba(0, 0, 0, 0.1);
           cursor: pointer;
           background-color: transparent;
           outline: none;
           font-family: inherit;
+          transition: all 0.2s ease;
         }
         
         .segment:hover {
@@ -537,13 +547,6 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
           display: inline;
         }
         
-        .max { 
-          background-color: #d0d0d0; 
-          width: 60px;
-          flex-shrink: 0;
-        }
-        
-        /* Usuń style dla przycisków kolorów */
         .color-buttons-container {
           display: none;
         }
@@ -558,11 +561,12 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
           align-items: center;
           z-index: 1000;
           width: 240px;
+          border: 1px solid #e0e0e0;
         }
         
         .color-picker-header {
           font-size: 0.85rem;
-          font-weight: bold;
+          font-weight: normal;
           margin-bottom: 10px;
           text-align: center;
         }
@@ -592,7 +596,7 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
         
         .instruction-text {
           text-align: center;
-          margin-top: 10px;
+          margin-top: 5px;
           font-size: 0.75rem;
           color: #666;
           position: absolute;

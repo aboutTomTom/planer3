@@ -8,7 +8,7 @@ import { HexColorPicker } from 'react-colorful';
 import { clsx } from 'clsx';
 import TimeThresholdSlider from '@/components/TimeThresholdSlider';
 import DaysSelector from '@/components/DaysSelector';
-import { useLoading } from '@/lib/context/LoadingContext';
+import { showLoading, hideLoading } from '@/components/LoadingScreen';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -24,7 +24,6 @@ interface Toast {
 
 export default function UstawieniaPage() {
   const { config, updateTimeThresholds, updateDisplayedDays, reloadConfig } = useAppConfig();
-  const { setLoading } = useLoading();
   const [activeTab, setActiveTab] = useState(0);
   const [timeThresholds, setTimeThresholds] = useState(config.timeThresholds);
   const [displayedDays, setDisplayedDays] = useState(config.displayedDays);
@@ -35,9 +34,17 @@ export default function UstawieniaPage() {
 
   // Inicjalizacja komponentu - ładowanie konfiguracji
   useEffect(() => {
+    // Chwilowo pokazujemy ekran ładowania podczas inicjalizacji
+    showLoading();
+    
     // Zaktualizuj stany lokalne z konfiguracji
     setTimeThresholds(config.timeThresholds);
     setDisplayedDays(config.displayedDays);
+    
+    // Po krótkim opóźnieniu ukryjemy ekran ładowania
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
   }, [config]);
 
   // Funkcja do wyświetlania powiadomień
@@ -54,13 +61,21 @@ export default function UstawieniaPage() {
   // Funkcja zapisująca zmiany w progach czasowych
   const saveTimeThresholds = async () => {
     try {
+      // Pokaż ekran ładowania podczas zapisywania
+      showLoading();
+      
       const success = await updateTimeThresholds(timeThresholds);
+      
+      // Ukryj ekran ładowania
+      hideLoading();
+      
       if (success) {
         showToast('Progi czasowe zostały zapisane', 'success');
       } else {
         showToast('Wystąpił błąd podczas zapisywania progów czasowych', 'error');
       }
     } catch (error) {
+      hideLoading();
       showToast('Wystąpił błąd podczas zapisywania progów czasowych', 'error');
       console.error('Error saving time thresholds:', error);
     }
@@ -69,13 +84,21 @@ export default function UstawieniaPage() {
   // Funkcja zapisująca zmiany w wyświetlanych dniach
   const saveDisplayedDays = async () => {
     try {
+      // Pokaż ekran ładowania podczas zapisywania
+      showLoading();
+      
       const success = await updateDisplayedDays(displayedDays);
+      
+      // Ukryj ekran ładowania
+      hideLoading();
+      
       if (success) {
         showToast('Ustawienia dni zostały zapisane', 'success');
       } else {
         showToast('Wystąpił błąd podczas zapisywania ustawień dni', 'error');
       }
     } catch (error) {
+      hideLoading();
       showToast('Wystąpił błąd podczas zapisywania ustawień dni', 'error');
       console.error('Error saving displayed days:', error);
     }
@@ -104,9 +127,17 @@ export default function UstawieniaPage() {
   // Funkcja do ponownego ładowania konfiguracji z serwera
   const handleReloadConfig = async () => {
     try {
+      // Pokaż ekran ładowania
+      showLoading();
+      
       await reloadConfig();
+      
+      // Ukryj ekran ładowania
+      hideLoading();
+      
       showToast('Konfiguracja została ponownie załadowana', 'success');
     } catch (error) {
+      hideLoading();
       showToast('Wystąpił błąd podczas ponownego ładowania konfiguracji', 'error');
       console.error('Error reloading config:', error);
     }

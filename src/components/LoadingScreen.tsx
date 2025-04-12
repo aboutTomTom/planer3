@@ -1,10 +1,61 @@
 'use client';
 
-import React from 'react';
-import { useLoading } from '@/lib/context/LoadingContext';
+import React, { useEffect, useState } from 'react';
+
+// Globalny identyfikator dla naszego ekranu ładowania
+let loadingTimeoutId: NodeJS.Timeout | null = null;
+let isGlobalLoading = false;
+
+// Funkcje pomocnicze do sterowania ekranem ładowania
+export const showLoading = () => {
+  isGlobalLoading = true;
+  const event = new Event('loading-change');
+  window.dispatchEvent(event);
+  
+  // Automatycznie ukryj ekran ładowania po 10 sekundach (dla bezpieczeństwa)
+  if (loadingTimeoutId) clearTimeout(loadingTimeoutId);
+  loadingTimeoutId = setTimeout(() => {
+    hideLoading();
+  }, 10000);
+};
+
+export const hideLoading = () => {
+  isGlobalLoading = false;
+  if (loadingTimeoutId) {
+    clearTimeout(loadingTimeoutId);
+    loadingTimeoutId = null;
+  }
+  const event = new Event('loading-change');
+  window.dispatchEvent(event);
+};
 
 export default function LoadingScreen() {
-  const { isLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    // Aktualizacja stanu na podstawie globalnego zdarzenia
+    const handleLoadingChange = () => {
+      setIsLoading(isGlobalLoading);
+    };
+    
+    // Rejestracja nasłuchiwacza zdarzenia
+    if (typeof window !== 'undefined') {
+      window.addEventListener('loading-change', handleLoadingChange);
+    }
+    
+    // Czyszczenie nasłuchiwacza przy odmontowaniu
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('loading-change', handleLoadingChange);
+      }
+      
+      // Zawsze czyścimy timeout przy odmontowaniu
+      if (loadingTimeoutId) {
+        clearTimeout(loadingTimeoutId);
+        loadingTimeoutId = null;
+      }
+    };
+  }, []);
 
   // Jeśli nie ładujemy, nie renderuj nic
   if (!isLoading) {
