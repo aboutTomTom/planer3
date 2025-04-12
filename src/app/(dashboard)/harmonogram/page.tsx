@@ -255,7 +255,7 @@ export default function HarmonogramPage() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [isWeekPickerOpen, setIsWeekPickerOpen] = useState(false);
   const { config } = useAppConfig();
-  const { startLoading, stopLoading } = useLoading();
+  const { setLoading } = useLoading();
   const { displayedDays } = config;
   
   // Stany dla drag & drop
@@ -335,7 +335,7 @@ export default function HarmonogramPage() {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      startLoading(); // Ustaw globalny stan ładowania
+      setLoading(true); // Ustaw globalny stan ładowania
       
       try {
         // Pobieranie użytkowników
@@ -403,12 +403,12 @@ export default function HarmonogramPage() {
         ]);
       } finally {
         setIsLoading(false);
-        stopLoading(); // Zakończ globalny stan ładowania
+        setLoading(false); // Zakończ globalny stan ładowania
       }
     };
     
     fetchData();
-  }, [currentWeek, weekStart, startLoading, stopLoading]); 
+  }, [currentWeek, weekStart, setLoading]);
 
   // Filtrowanie użytkowników wg działu
   const filteredUsers = useMemo(() => {

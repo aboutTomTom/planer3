@@ -1,48 +1,18 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useLoading } from '@/lib/context/LoadingContext';
 
 export default function LoadingScreen() {
   const { isLoading } = useLoading();
-  const [visible, setVisible] = useState(true);
-  const [mounted, setMounted] = useState(false);
 
-  // Efekt montowania - ustawienie flagi mounted na true po zamontowaniu
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  // Efekt obsługujący widoczność ekranu ładowania
-  useEffect(() => {
-    if (mounted) {
-      if (isLoading) {
-        // Pokaż ekran natychmiast, gdy isLoading = true
-        setVisible(true);
-      } else {
-        // Dodaj opóźnienie przed usunięciem, aby zapewnić płynne przejście
-        const timer = setTimeout(() => {
-          setVisible(false);
-        }, 300);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [isLoading, mounted]);
-
-  // Nie renderuj nic, jeśli ekran jest niewidoczny i nie jest w trakcie ładowania
-  if (!visible && !isLoading) {
+  // Jeśli nie ładujemy, nie renderuj nic
+  if (!isLoading) {
     return null;
   }
 
   return (
-    <div 
-      className="loading-overlay"
-      style={{
-        opacity: isLoading ? 1 : 0,
-        pointerEvents: isLoading ? 'auto' : 'none',
-      }}
-    >
+    <div className="loading-overlay">
       <div className="loading-container">
         <div className="spinner"></div>
         <p>Ładowanie aplikacji...</p>
@@ -60,7 +30,6 @@ export default function LoadingScreen() {
           justify-content: center;
           align-items: center;
           z-index: 9999;
-          transition: opacity 0.5s ease;
         }
 
         .loading-container {
@@ -72,8 +41,6 @@ export default function LoadingScreen() {
           border-radius: 8px;
           padding: 30px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          transform: scale(1);
-          transition: transform 0.3s ease;
           animation: pulse 2s infinite ease-in-out;
         }
 
