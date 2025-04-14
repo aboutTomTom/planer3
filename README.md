@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Planer 3 - System planowania zadań agencji kreatywnej
 
-## Getting Started
+Planer 3 to aplikacja webowa do zarządzania zadaniami i harmonogramem pracy w agencji kreatywnej. Pozwala na efektywne zarządzanie projektami, przydzielanie zadań zespołowi oraz śledzenie postępów prac.
 
-First, run the development server:
+## Funkcje
 
+- Zarządzanie zadaniami (dodawanie, edycja, usuwanie)
+- Harmonogram pracy z widokiem tygodniowym
+- Zarządzanie użytkownikami i działami
+- Przydzielanie zadań do użytkowników
+- Filtrowanie i sortowanie zadań
+- System priorytetów
+- Zarządzanie klientami i markami
+
+## Technologie
+
+- Next.js 15
+- React
+- Tailwind CSS
+- Prisma ORM
+- SQLite (w wersji deweloperskiej)
+
+## Wymagania
+
+- Node.js (v18 lub nowszy)
+- npm (v9 lub nowszy)
+
+## Instalacja
+
+1. Sklonuj repozytorium:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/aboutTomTom/planer3.git
+cd planer3
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Zainstaluj zależności:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Wygeneruj klienta Prisma:
+```bash
+npx prisma generate
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Uruchom migracje bazy danych:
+```bash
+npx prisma migrate dev
+```
 
-## Learn More
+## Uruchomienie
 
-To learn more about Next.js, take a look at the following resources:
+1. Uruchom serwer deweloperski:
+```bash
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Otwórz aplikację w przeglądarce:
+```
+http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Aby otworzyć Prisma Studio (przeglądarka bazy danych):
+```bash
+npx prisma studio
+```
 
-## Deploy on Vercel
+## Lista zadań (TODO)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] Informacja o źródle danych - dodać oznaczenie przy konfiguracji informujące, czy dane zostały pobrane z localStorage czy z bazy danych (np. przy "Wersja konfiguracji: validated.1744491083991" dodać informację "pobrane z LS" lub "pobrane z DB")
+- [ ] Zabezpieczenie całego serwisu logowaniem
+- [ ] Obsługa współbieżnego używania przez wielu użytkowników - implementacja mechanizmu blokującego możliwość równoczesnej edycji tego samego zadania przez różnych użytkowników
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Licencja
+
+Ten projekt jest własnością [nazwa firmy/właściciela]. Wszelkie prawa zastrzeżone.

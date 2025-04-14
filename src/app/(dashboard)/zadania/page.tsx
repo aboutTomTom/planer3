@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaPlus, FaSearch, FaFilter, FaSortAmountDown, FaPen, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaSearch, FaFilter, FaSortAmountDown, FaPen, FaTrash, FaUser, FaClock, FaCalendarAlt, FaTags } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface Task {
@@ -30,6 +30,9 @@ export default function ZadaniaPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const [sortField, setSortField] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = useState({
     priority: '',
     clientId: '',
@@ -115,6 +118,34 @@ export default function ZadaniaPage() {
     fetchTasks();
   }, []);
 
+  // Funkcja do sortowania zadań
+  const sortTasks = (a: Task, b: Task) => {
+    if (sortField === 'title') {
+      return sortOrder === 'asc' 
+        ? a.title.localeCompare(b.title)
+        : b.title.localeCompare(a.title);
+    } else if (sortField === 'priority') {
+      return sortOrder === 'asc' 
+        ? a.priority - b.priority
+        : b.priority - a.priority;
+    } else if (sortField === 'client') {
+      return sortOrder === 'asc' 
+        ? a.brand.client.name.localeCompare(b.brand.client.name)
+        : b.brand.client.name.localeCompare(a.brand.client.name);
+    } else if (sortField === 'time') {
+      return sortOrder === 'asc' 
+        ? a.estimatedTime - b.estimatedTime
+        : b.estimatedTime - a.estimatedTime;
+    } else if (sortField === 'date') {
+      if (!a.expiryDate) return sortOrder === 'asc' ? 1 : -1;
+      if (!b.expiryDate) return sortOrder === 'asc' ? -1 : 1;
+      return sortOrder === 'asc' 
+        ? new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+        : new Date(b.expiryDate).getTime() - new Date(a.expiryDate).getTime();
+    }
+    return 0;
+  };
+
   // Obsługa filtrowania zadań
   const filteredTasks = tasks.filter((task) => {
     // Filtrowanie po wyszukiwaniu
@@ -134,7 +165,7 @@ export default function ZadaniaPage() {
       : true;
 
     return matchesSearch && matchesPriority && matchesClient && matchesBrand && matchesAssignee;
-  });
+  }).sort(sortTasks);
 
   // Funkcja zwracająca kolor dla priorytetu
   const getPriorityColor = (priority: number) => {
@@ -168,6 +199,100 @@ export default function ZadaniaPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+          </div>
+
+          <div className="relative">
+            <button
+              className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              onClick={() => setShowSortMenu(!showSortMenu)}
+            >
+              <FaSortAmountDown className="mr-2 text-gray-500" />
+              Sortuj
+            </button>
+            {sortField && (
+              <button
+                onClick={() => {
+                  setSortField('');
+                  setSortOrder('asc');
+                }}
+                className="ml-1 px-2 py-2 border border-gray-300 rounded-md bg-white text-xs font-medium text-gray-700 hover:bg-red-50 hover:text-red-500"
+                title="Resetuj sortowanie"
+              >
+                ×
+              </button>
+            )}
+            
+            {showSortMenu && (
+              <div className="absolute right-0 z-10 mt-1 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  <button
+                    onClick={() => {
+                      setSortField('title');
+                      setSortOrder(sortField === 'title' && sortOrder === 'asc' ? 'desc' : 'asc');
+                      setShowSortMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center ${
+                      sortField === 'title' ? 'bg-blue-50 text-blue-700' : ''
+                    }`}
+                  >
+                    <FaTags className="mr-2" />
+                    Tytuł zadania {sortField === 'title' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSortField('priority');
+                      setSortOrder(sortField === 'priority' && sortOrder === 'asc' ? 'desc' : 'asc');
+                      setShowSortMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center ${
+                      sortField === 'priority' ? 'bg-blue-50 text-blue-700' : ''
+                    }`}
+                  >
+                    <FaFilter className="mr-2" />
+                    Priorytet {sortField === 'priority' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSortField('client');
+                      setSortOrder(sortField === 'client' && sortOrder === 'asc' ? 'desc' : 'asc');
+                      setShowSortMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center ${
+                      sortField === 'client' ? 'bg-blue-50 text-blue-700' : ''
+                    }`}
+                  >
+                    <FaUser className="mr-2" />
+                    Klient {sortField === 'client' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSortField('time');
+                      setSortOrder(sortField === 'time' && sortOrder === 'asc' ? 'desc' : 'asc');
+                      setShowSortMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center ${
+                      sortField === 'time' ? 'bg-blue-50 text-blue-700' : ''
+                    }`}
+                  >
+                    <FaClock className="mr-2" />
+                    Czas trwania {sortField === 'time' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSortField('date');
+                      setSortOrder(sortField === 'date' && sortOrder === 'asc' ? 'desc' : 'asc');
+                      setShowSortMenu(false);
+                    }}
+                    className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 flex items-center ${
+                      sortField === 'date' ? 'bg-blue-50 text-blue-700' : ''
+                    }`}
+                  >
+                    <FaCalendarAlt className="mr-2" />
+                    Termin {sortField === 'date' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <button
@@ -263,129 +388,168 @@ export default function ZadaniaPage() {
       )}
 
       {/* Tabela zadań */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Zadanie
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Klient/Marka
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Priorytet
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Czas
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Przypisane do
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Termin
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Akcje
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {loading ? (
+      <div className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden">
+        <style jsx>{`
+          .tasks-table td:first-child {
+            background-color: inherit !important;
+            position: static !important;
+          }
+        `}</style>
+        <style jsx global>{`
+          .tasks-table td:first-child {
+            background-color: inherit !important;
+            position: static !important;
+            z-index: auto !important;
+          }
+          
+          .tasks-table tr {
+            background-color: inherit;
+          }
+        `}</style>
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+          <h2 className="text-lg font-medium text-gray-700">Lista zadań</h2>
+          <span className="text-sm text-gray-500">
+            Wyświetlono {filteredTasks.length} z {tasks.length} zadań
+          </span>
+        </div>
+        <div className="overflow-auto">
+          <table className="min-w-full table-fixed tasks-table" style={{ borderCollapse: 'collapse' }}>
+            <thead className="bg-gray-50">
               <tr>
-                <td colSpan={7} className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                  Ładowanie zadań...
-                </td>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3 border-r border-gray-200"
+                >
+                  Zadanie
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"
+                >
+                  Klient/Marka
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"
+                >
+                  Priorytet
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"
+                >
+                  Czas
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"
+                >
+                  Przypisane do
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-200"
+                >
+                  Termin
+                </th>
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Akcje
+                </th>
               </tr>
-            ) : filteredTasks.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">
-                  Brak zadań spełniających kryteria wyszukiwania
-                </td>
-              </tr>
-            ) : (
-              filteredTasks.map((task) => (
-                <tr key={task.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{task.title}</div>
-                    {task.description && (
-                      <div className="text-xs text-gray-500 truncate max-w-xs">{task.description}</div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{task.brand.client.name}</div>
-                    <div className="text-xs text-gray-500">{task.brand.name}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getPriorityColor(
-                        task.priority
-                      )}`}
-                    >
-                      {task.priority === 1
-                        ? 'Wysoki'
-                        : task.priority === 2
-                        ? 'Średni'
-                        : 'Niski'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {task.estimatedTime}h
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {task.assignedTo ? task.assignedTo.name : '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {task.expiryDate
-                      ? new Date(task.expiryDate).toLocaleDateString('pl-PL')
-                      : '-'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <Link
-                      href={`/zadania/${task.id}/edycja`}
-                      className="text-indigo-600 hover:text-indigo-900 mr-3"
-                    >
-                      <FaPen className="inline-block" />
-                    </Link>
-                    <button
-                      onClick={() => {
-                        // Tutaj dodaj logikę usuwania zadania
-                        if (confirm(`Czy na pewno chcesz usunąć zadanie "${task.title}"?`)) {
-                          // Symulacja usunięcia (w rzeczywistej aplikacji byłoby żądanie API)
-                          setTasks(prev => prev.filter(t => t.id !== task.id));
-                        }
-                      }}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      <FaTrash className="inline-block" />
-                    </button>
+            </thead>
+            <tbody style={{ borderCollapse: 'collapse' }}>
+              {loading ? (
+                <tr style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #f3f4f6" }}>
+                  <td colSpan={7} className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                    <div className="flex justify-center items-center space-x-2">
+                      <svg className="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Ładowanie zadań...</span>
+                    </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : filteredTasks.length === 0 ? (
+                <tr style={{ backgroundColor: "#ffffff", borderBottom: "1px solid #f3f4f6" }}>
+                  <td colSpan={7} className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                    Brak zadań spełniających kryteria wyszukiwania
+                  </td>
+                </tr>
+              ) : (
+                filteredTasks.map((task, index) => (
+                  <tr 
+                    key={task.id} 
+                    style={{ 
+                      backgroundColor: index % 2 === 0 ? "#ffffff" : "#f9fafb",
+                      transition: "background-color 0.2s",
+                      borderBottom: "1px solid #f3f4f6"
+                    }}
+                    className="w-full hover:bg-gray-100"
+                  >
+                    <td className="px-4 py-3 border-r border-gray-100" style={{ backgroundColor: 'inherit' }}>
+                      <div className="text-sm font-medium text-gray-900">{task.title}</div>
+                      {task.description && (
+                        <div className="text-xs text-gray-500 line-clamp-2 pr-2">{task.description}</div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-center border-r border-gray-100">
+                      <div className="text-sm text-gray-900">{task.brand.client.name}</div>
+                      <div className="text-xs text-gray-500">{task.brand.name}</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-center border-r border-gray-100">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getPriorityColor(
+                          task.priority
+                        )}`}
+                      >
+                        {task.priority === 1
+                          ? 'Wysoki'
+                          : task.priority === 2
+                          ? 'Średni'
+                          : 'Niski'}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-100">
+                      {task.estimatedTime}h
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-100">
+                      {task.assignedTo ? task.assignedTo.name : '-'}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500 text-center border-r border-gray-100">
+                      {task.expiryDate
+                        ? new Date(task.expiryDate).toLocaleDateString('pl-PL')
+                        : '-'}
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-center">
+                      <Link
+                        href={`/zadania/${task.id}/edycja`}
+                        className="text-indigo-600 hover:text-indigo-900 mr-3"
+                      >
+                        <FaPen className="inline-block" />
+                      </Link>
+                      <button
+                        onClick={() => {
+                          // Tutaj dodaj logikę usuwania zadania
+                          if (confirm(`Czy na pewno chcesz usunąć zadanie "${task.title}"?`)) {
+                            // Symulacja usunięcia (w rzeczywistej aplikacji byłoby żądanie API)
+                            setTasks(prev => prev.filter(t => t.id !== task.id));
+                          }
+                        }}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        <FaTrash className="inline-block" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
