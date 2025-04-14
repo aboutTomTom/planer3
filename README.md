@@ -1,31 +1,31 @@
-# Planer 3 - System planowania zadań agencji kreatywnej
+# Planer3
 
-Planer 3 to aplikacja webowa do zarządzania zadaniami i harmonogramem pracy w agencji kreatywnej. Pozwala na efektywne zarządzanie projektami, przydzielanie zadań zespołowi oraz śledzenie postępów prac.
+System zarządzania zadaniami i harmonogramem pracy dla agencji reklamowej. Aplikacja umożliwia planowanie zadań, przydzielanie ich do pracowników i zarządzanie czasem pracy zespołu.
 
-## Funkcje
+## Główne funkcje
 
-- Zarządzanie zadaniami (dodawanie, edycja, usuwanie)
+- Zarządzanie zadaniami (dodawanie, edycja, usuwanie, sortowanie, filtrowanie)
+- Przydzielanie zadań do pracowników
 - Harmonogram pracy z widokiem tygodniowym
-- Zarządzanie użytkownikami i działami
-- Przydzielanie zadań do użytkowników
-- Filtrowanie i sortowanie zadań
-- System priorytetów
 - Zarządzanie klientami i markami
+- Zarządzanie działami i pracownikami
+- System priorytetów dla zadań
 
 ## Technologie
 
-- Next.js 15
+- Next.js 15.3.0
 - React
+- TypeScript
 - Tailwind CSS
 - Prisma ORM
-- SQLite (w wersji deweloperskiej)
+- SQLite (baza danych)
 
 ## Wymagania
 
-- Node.js (v18 lub nowszy)
-- npm (v9 lub nowszy)
+- Node.js w wersji 18 lub nowszej
+- npm
 
-## Instalacja
+## Instalacja i uruchomienie
 
 1. Sklonuj repozytorium:
 ```bash
@@ -38,39 +38,32 @@ cd planer3
 npm install
 ```
 
-3. Wygeneruj klienta Prisma:
+3. Skonfiguruj bazę danych:
 ```bash
 npx prisma generate
-```
-
-4. Uruchom migracje bazy danych:
-```bash
 npx prisma migrate dev
 ```
 
-## Uruchomienie
-
-1. Uruchom serwer deweloperski:
+4. Uruchom aplikację w trybie deweloperskim:
 ```bash
 npm run dev
 ```
 
-2. Otwórz aplikację w przeglądarce:
+5. Otwórz przeglądarkę i przejdź pod adres:
 ```
 http://localhost:3000
 ```
 
-3. Aby otworzyć Prisma Studio (przeglądarka bazy danych):
+## Narzędzia deweloperskie
+
+- Prisma Studio - narzędzie do zarządzania bazą danych:
 ```bash
 npx prisma studio
 ```
 
-## Lista zadań (TODO)
+## Struktura projektu
 
-- [ ] Informacja o źródle danych - dodać oznaczenie przy konfiguracji informujące, czy dane zostały pobrane z localStorage czy z bazy danych (np. przy "Wersja konfiguracji: validated.1744491083991" dodać informację "pobrane z LS" lub "pobrane z DB")
-- [ ] Zabezpieczenie całego serwisu logowaniem
-- [ ] Obsługa współbieżnego używania przez wielu użytkowników - implementacja mechanizmu blokującego możliwość równoczesnej edycji tego samego zadania przez różnych użytkowników
-
-## Licencja
-
-Ten projekt jest własnością [nazwa firmy/właściciela]. Wszelkie prawa zastrzeżone.
+- `/src/app` - główne komponenty aplikacji i routing
+- `/src/components` - współdzielone komponenty UI
+- `/src/lib` - funkcje pomocnicze, kontekst, konfiguracja
+- `/prisma` - schemat bazy danych i migracje
