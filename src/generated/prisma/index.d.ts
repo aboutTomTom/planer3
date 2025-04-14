@@ -50,24 +50,6 @@ export type HarmonogramBlock = $Result.DefaultSelection<Prisma.$HarmonogramBlock
 export type Settings = $Result.DefaultSelection<Prisma.$SettingsPayload>
 
 /**
- * Enums
- */
-export namespace $Enums {
-  export const UserRole: {
-  ADMIN: 'ADMIN',
-  EDITOR: 'EDITOR',
-  VIEWER: 'VIEWER'
-};
-
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
-
-}
-
-export type UserRole = $Enums.UserRole
-
-export const UserRole: typeof $Enums.UserRole
-
-/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -1433,15 +1415,15 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    harmonogramBlocks: number
     assignedTasks: number
     createdTasks: number
-    harmonogramBlocks: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    harmonogramBlocks?: boolean | UserCountOutputTypeCountHarmonogramBlocksArgs
     assignedTasks?: boolean | UserCountOutputTypeCountAssignedTasksArgs
     createdTasks?: boolean | UserCountOutputTypeCountCreatedTasksArgs
-    harmonogramBlocks?: boolean | UserCountOutputTypeCountHarmonogramBlocksArgs
   }
 
   // Custom InputTypes
@@ -1458,6 +1440,13 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountHarmonogramBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HarmonogramBlockWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountAssignedTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
   }
@@ -1467,13 +1456,6 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCreatedTasksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TaskWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountHarmonogramBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: HarmonogramBlockWhereInput
   }
 
 
@@ -1632,7 +1614,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
-    role: $Enums.UserRole | null
+    role: string | null
     departmentId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1643,7 +1625,7 @@ export namespace Prisma {
     name: string | null
     email: string | null
     password: string | null
-    role: $Enums.UserRole | null
+    role: string | null
     departmentId: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1797,7 +1779,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role: $Enums.UserRole
+    role: string
     departmentId: number | null
     createdAt: Date
     updatedAt: Date
@@ -1831,10 +1813,10 @@ export namespace Prisma {
     departmentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    department?: boolean | User$departmentArgs<ExtArgs>
+    harmonogramBlocks?: boolean | User$harmonogramBlocksArgs<ExtArgs>
     assignedTasks?: boolean | User$assignedTasksArgs<ExtArgs>
     createdTasks?: boolean | User$createdTasksArgs<ExtArgs>
-    harmonogramBlocks?: boolean | User$harmonogramBlocksArgs<ExtArgs>
+    department?: boolean | User$departmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1875,10 +1857,10 @@ export namespace Prisma {
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "role" | "departmentId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    department?: boolean | User$departmentArgs<ExtArgs>
+    harmonogramBlocks?: boolean | User$harmonogramBlocksArgs<ExtArgs>
     assignedTasks?: boolean | User$assignedTasksArgs<ExtArgs>
     createdTasks?: boolean | User$createdTasksArgs<ExtArgs>
-    harmonogramBlocks?: boolean | User$harmonogramBlocksArgs<ExtArgs>
+    department?: boolean | User$departmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1891,17 +1873,17 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      department: Prisma.$DepartmentPayload<ExtArgs> | null
+      harmonogramBlocks: Prisma.$HarmonogramBlockPayload<ExtArgs>[]
       assignedTasks: Prisma.$TaskPayload<ExtArgs>[]
       createdTasks: Prisma.$TaskPayload<ExtArgs>[]
-      harmonogramBlocks: Prisma.$HarmonogramBlockPayload<ExtArgs>[]
+      department: Prisma.$DepartmentPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
       email: string
       password: string
-      role: $Enums.UserRole
+      role: string
       departmentId: number | null
       createdAt: Date
       updatedAt: Date
@@ -2299,10 +2281,10 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    department<T extends User$departmentArgs<ExtArgs> = {}>(args?: Subset<T, User$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    harmonogramBlocks<T extends User$harmonogramBlocksArgs<ExtArgs> = {}>(args?: Subset<T, User$harmonogramBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HarmonogramBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     assignedTasks<T extends User$assignedTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$assignedTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdTasks<T extends User$createdTasksArgs<ExtArgs> = {}>(args?: Subset<T, User$createdTasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    harmonogramBlocks<T extends User$harmonogramBlocksArgs<ExtArgs> = {}>(args?: Subset<T, User$harmonogramBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HarmonogramBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    department<T extends User$departmentArgs<ExtArgs> = {}>(args?: Subset<T, User$departmentArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2336,7 +2318,7 @@ export namespace Prisma {
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
-    readonly role: FieldRef<"User", 'UserRole'>
+    readonly role: FieldRef<"User", 'String'>
     readonly departmentId: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
@@ -2734,22 +2716,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.department
+   * User.harmonogramBlocks
    */
-  export type User$departmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$harmonogramBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Department
+     * Select specific fields to fetch from the HarmonogramBlock
      */
-    select?: DepartmentSelect<ExtArgs> | null
+    select?: HarmonogramBlockSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Department
+     * Omit specific fields from the HarmonogramBlock
      */
-    omit?: DepartmentOmit<ExtArgs> | null
+    omit?: HarmonogramBlockOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: DepartmentInclude<ExtArgs> | null
-    where?: DepartmentWhereInput
+    include?: HarmonogramBlockInclude<ExtArgs> | null
+    where?: HarmonogramBlockWhereInput
+    orderBy?: HarmonogramBlockOrderByWithRelationInput | HarmonogramBlockOrderByWithRelationInput[]
+    cursor?: HarmonogramBlockWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HarmonogramBlockScalarFieldEnum | HarmonogramBlockScalarFieldEnum[]
   }
 
   /**
@@ -2801,27 +2788,22 @@ export namespace Prisma {
   }
 
   /**
-   * User.harmonogramBlocks
+   * User.department
    */
-  export type User$harmonogramBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$departmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the HarmonogramBlock
+     * Select specific fields to fetch from the Department
      */
-    select?: HarmonogramBlockSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the HarmonogramBlock
+     * Omit specific fields from the Department
      */
-    omit?: HarmonogramBlockOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: HarmonogramBlockInclude<ExtArgs> | null
-    where?: HarmonogramBlockWhereInput
-    orderBy?: HarmonogramBlockOrderByWithRelationInput | HarmonogramBlockOrderByWithRelationInput[]
-    cursor?: HarmonogramBlockWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: HarmonogramBlockScalarFieldEnum | HarmonogramBlockScalarFieldEnum[]
+    include?: DepartmentInclude<ExtArgs> | null
+    where?: DepartmentWhereInput
   }
 
   /**
@@ -5060,6 +5042,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     clientId: number | null
+    color: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5068,6 +5051,7 @@ export namespace Prisma {
     id: number | null
     name: string | null
     clientId: number | null
+    color: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5076,6 +5060,7 @@ export namespace Prisma {
     id: number
     name: number
     clientId: number
+    color: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5096,6 +5081,7 @@ export namespace Prisma {
     id?: true
     name?: true
     clientId?: true
+    color?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5104,6 +5090,7 @@ export namespace Prisma {
     id?: true
     name?: true
     clientId?: true
+    color?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5112,6 +5099,7 @@ export namespace Prisma {
     id?: true
     name?: true
     clientId?: true
+    color?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5207,6 +5195,7 @@ export namespace Prisma {
     id: number
     name: string
     clientId: number
+    color: string
     createdAt: Date
     updatedAt: Date
     _count: BrandCountAggregateOutputType | null
@@ -5234,6 +5223,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clientId?: boolean
+    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     client?: boolean | ClientDefaultArgs<ExtArgs>
@@ -5245,6 +5235,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clientId?: boolean
+    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     client?: boolean | ClientDefaultArgs<ExtArgs>
@@ -5254,6 +5245,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clientId?: boolean
+    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     client?: boolean | ClientDefaultArgs<ExtArgs>
@@ -5263,11 +5255,12 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     clientId?: boolean
+    color?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type BrandOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "clientId" | "createdAt" | "updatedAt", ExtArgs["result"]["brand"]>
+  export type BrandOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "clientId" | "color" | "createdAt" | "updatedAt", ExtArgs["result"]["brand"]>
   export type BrandInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     client?: boolean | ClientDefaultArgs<ExtArgs>
     tasks?: boolean | Brand$tasksArgs<ExtArgs>
@@ -5290,6 +5283,7 @@ export namespace Prisma {
       id: number
       name: string
       clientId: number
+      color: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["brand"]>
@@ -5720,6 +5714,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Brand", 'Int'>
     readonly name: FieldRef<"Brand", 'String'>
     readonly clientId: FieldRef<"Brand", 'Int'>
+    readonly color: FieldRef<"Brand", 'String'>
     readonly createdAt: FieldRef<"Brand", 'DateTime'>
     readonly updatedAt: FieldRef<"Brand", 'DateTime'>
   }
@@ -6440,10 +6435,10 @@ export namespace Prisma {
     links?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
     harmonogramBlocks?: boolean | Task$harmonogramBlocksArgs<ExtArgs>
+    assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    brand?: boolean | BrandDefaultArgs<ExtArgs>
     _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
@@ -6461,9 +6456,9 @@ export namespace Prisma {
     links?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    brand?: boolean | BrandDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6480,9 +6475,9 @@ export namespace Prisma {
     links?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    brand?: boolean | BrandDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["task"]>
 
   export type TaskSelectScalar = {
@@ -6503,30 +6498,30 @@ export namespace Prisma {
 
   export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "priority" | "estimatedTime" | "brandId" | "createdById" | "assignedToId" | "expiryDate" | "notes" | "links" | "createdAt" | "updatedAt", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
-    assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
     harmonogramBlocks?: boolean | Task$harmonogramBlocksArgs<ExtArgs>
+    assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    brand?: boolean | BrandDefaultArgs<ExtArgs>
     _count?: boolean | TaskCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TaskIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    brand?: boolean | BrandDefaultArgs<ExtArgs>
   }
   export type TaskIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
     assignedTo?: boolean | Task$assignedToArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    brand?: boolean | BrandDefaultArgs<ExtArgs>
   }
 
   export type $TaskPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Task"
     objects: {
-      brand: Prisma.$BrandPayload<ExtArgs>
-      createdBy: Prisma.$UserPayload<ExtArgs>
-      assignedTo: Prisma.$UserPayload<ExtArgs> | null
       harmonogramBlocks: Prisma.$HarmonogramBlockPayload<ExtArgs>[]
+      assignedTo: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs>
+      brand: Prisma.$BrandPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6936,10 +6931,10 @@ export namespace Prisma {
    */
   export interface Prisma__TaskClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    brand<T extends BrandDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandDefaultArgs<ExtArgs>>): Prisma__BrandClient<$Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    assignedTo<T extends Task$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, Task$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     harmonogramBlocks<T extends Task$harmonogramBlocksArgs<ExtArgs> = {}>(args?: Subset<T, Task$harmonogramBlocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HarmonogramBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedTo<T extends Task$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, Task$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    brand<T extends BrandDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandDefaultArgs<ExtArgs>>): Prisma__BrandClient<$Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7376,25 +7371,6 @@ export namespace Prisma {
   }
 
   /**
-   * Task.assignedTo
-   */
-  export type Task$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
    * Task.harmonogramBlocks
    */
   export type Task$harmonogramBlocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7416,6 +7392,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: HarmonogramBlockScalarFieldEnum | HarmonogramBlockScalarFieldEnum[]
+  }
+
+  /**
+   * Task.assignedTo
+   */
+  export type Task$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -7679,8 +7674,8 @@ export namespace Prisma {
     lockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["harmonogramBlock"]>
 
   export type HarmonogramBlockSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7693,8 +7688,8 @@ export namespace Prisma {
     lockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["harmonogramBlock"]>
 
   export type HarmonogramBlockSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7707,8 +7702,8 @@ export namespace Prisma {
     lockedUntil?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["harmonogramBlock"]>
 
   export type HarmonogramBlockSelectScalar = {
@@ -7725,23 +7720,23 @@ export namespace Prisma {
 
   export type HarmonogramBlockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "taskId" | "userId" | "date" | "allocatedTime" | "isLocked" | "lockedUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["harmonogramBlock"]>
   export type HarmonogramBlockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
   }
   export type HarmonogramBlockIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
   }
   export type HarmonogramBlockIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    task?: boolean | TaskDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    task?: boolean | TaskDefaultArgs<ExtArgs>
   }
 
   export type $HarmonogramBlockPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "HarmonogramBlock"
     objects: {
-      task: Prisma.$TaskPayload<ExtArgs>
       user: Prisma.$UserPayload<ExtArgs>
+      task: Prisma.$TaskPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -8147,8 +8142,8 @@ export namespace Prisma {
    */
   export interface Prisma__HarmonogramBlockClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    task<T extends TaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskDefaultArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    task<T extends TaskDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TaskDefaultArgs<ExtArgs>>): Prisma__TaskClient<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9629,6 +9624,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     clientId: 'clientId',
+    color: 'color',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -9716,13 +9712,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'UserRole'
-   */
-  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
-    
-
-
-  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -9754,14 +9743,14 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    role?: StringFilter<"User"> | string
     departmentId?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    harmonogramBlocks?: HarmonogramBlockListRelationFilter
     assignedTasks?: TaskListRelationFilter
     createdTasks?: TaskListRelationFilter
-    harmonogramBlocks?: HarmonogramBlockListRelationFilter
+    department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9773,10 +9762,10 @@ export namespace Prisma {
     departmentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    department?: DepartmentOrderByWithRelationInput
+    harmonogramBlocks?: HarmonogramBlockOrderByRelationAggregateInput
     assignedTasks?: TaskOrderByRelationAggregateInput
     createdTasks?: TaskOrderByRelationAggregateInput
-    harmonogramBlocks?: HarmonogramBlockOrderByRelationAggregateInput
+    department?: DepartmentOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9787,14 +9776,14 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    role?: StringFilter<"User"> | string
     departmentId?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
-    department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
+    harmonogramBlocks?: HarmonogramBlockListRelationFilter
     assignedTasks?: TaskListRelationFilter
     createdTasks?: TaskListRelationFilter
-    harmonogramBlocks?: HarmonogramBlockListRelationFilter
+    department?: XOR<DepartmentNullableScalarRelationFilter, DepartmentWhereInput> | null
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -9821,7 +9810,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
-    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    role?: StringWithAggregatesFilter<"User"> | string
     departmentId?: IntNullableWithAggregatesFilter<"User"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -9943,6 +9932,7 @@ export namespace Prisma {
     id?: IntFilter<"Brand"> | number
     name?: StringFilter<"Brand"> | string
     clientId?: IntFilter<"Brand"> | number
+    color?: StringFilter<"Brand"> | string
     createdAt?: DateTimeFilter<"Brand"> | Date | string
     updatedAt?: DateTimeFilter<"Brand"> | Date | string
     client?: XOR<ClientScalarRelationFilter, ClientWhereInput>
@@ -9953,6 +9943,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clientId?: SortOrder
+    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     client?: ClientOrderByWithRelationInput
@@ -9967,6 +9958,7 @@ export namespace Prisma {
     NOT?: BrandWhereInput | BrandWhereInput[]
     name?: StringFilter<"Brand"> | string
     clientId?: IntFilter<"Brand"> | number
+    color?: StringFilter<"Brand"> | string
     createdAt?: DateTimeFilter<"Brand"> | Date | string
     updatedAt?: DateTimeFilter<"Brand"> | Date | string
     client?: XOR<ClientScalarRelationFilter, ClientWhereInput>
@@ -9977,6 +9969,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clientId?: SortOrder
+    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BrandCountOrderByAggregateInput
@@ -9993,6 +9986,7 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Brand"> | number
     name?: StringWithAggregatesFilter<"Brand"> | string
     clientId?: IntWithAggregatesFilter<"Brand"> | number
+    color?: StringWithAggregatesFilter<"Brand"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Brand"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Brand"> | Date | string
   }
@@ -10014,10 +10008,10 @@ export namespace Prisma {
     links?: StringNullableFilter<"Task"> | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
-    brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
-    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
-    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     harmonogramBlocks?: HarmonogramBlockListRelationFilter
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
   }
 
   export type TaskOrderByWithRelationInput = {
@@ -10034,10 +10028,10 @@ export namespace Prisma {
     links?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    brand?: BrandOrderByWithRelationInput
-    createdBy?: UserOrderByWithRelationInput
-    assignedTo?: UserOrderByWithRelationInput
     harmonogramBlocks?: HarmonogramBlockOrderByRelationAggregateInput
+    assignedTo?: UserOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+    brand?: BrandOrderByWithRelationInput
   }
 
   export type TaskWhereUniqueInput = Prisma.AtLeast<{
@@ -10057,10 +10051,10 @@ export namespace Prisma {
     links?: StringNullableFilter<"Task"> | string | null
     createdAt?: DateTimeFilter<"Task"> | Date | string
     updatedAt?: DateTimeFilter<"Task"> | Date | string
-    brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
-    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
-    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     harmonogramBlocks?: HarmonogramBlockListRelationFilter
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
   }, "id">
 
   export type TaskOrderByWithAggregationInput = {
@@ -10116,8 +10110,8 @@ export namespace Prisma {
     lockedUntil?: DateTimeNullableFilter<"HarmonogramBlock"> | Date | string | null
     createdAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
     updatedAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
-    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
   }
 
   export type HarmonogramBlockOrderByWithRelationInput = {
@@ -10130,8 +10124,8 @@ export namespace Prisma {
     lockedUntil?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    task?: TaskOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    task?: TaskOrderByWithRelationInput
   }
 
   export type HarmonogramBlockWhereUniqueInput = Prisma.AtLeast<{
@@ -10148,8 +10142,8 @@ export namespace Prisma {
     lockedUntil?: DateTimeNullableFilter<"HarmonogramBlock"> | Date | string | null
     createdAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
     updatedAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
-    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    task?: XOR<TaskScalarRelationFilter, TaskWhereInput>
   }, "id" | "taskId_userId_date">
 
   export type HarmonogramBlockOrderByWithAggregationInput = {
@@ -10235,13 +10229,13 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role?: $Enums.UserRole
+    role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    department?: DepartmentCreateNestedOneWithoutUsersInput
+    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
     assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
     createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10249,26 +10243,26 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role?: $Enums.UserRole
+    role?: string
     departmentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
     assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
     createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    department?: DepartmentUpdateOneWithoutUsersNestedInput
+    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
     createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10276,13 +10270,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
     createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10290,7 +10284,7 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role?: $Enums.UserRole
+    role?: string
     departmentId?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -10300,7 +10294,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10310,7 +10304,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     departmentId?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10425,6 +10419,7 @@ export namespace Prisma {
 
   export type BrandCreateInput = {
     name: string
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     client: ClientCreateNestedOneWithoutBrandsInput
@@ -10435,6 +10430,7 @@ export namespace Prisma {
     id?: number
     name: string
     clientId: number
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     tasks?: TaskUncheckedCreateNestedManyWithoutBrandInput
@@ -10442,6 +10438,7 @@ export namespace Prisma {
 
   export type BrandUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     client?: ClientUpdateOneRequiredWithoutBrandsNestedInput
@@ -10452,6 +10449,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clientId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tasks?: TaskUncheckedUpdateManyWithoutBrandNestedInput
@@ -10461,12 +10459,14 @@ export namespace Prisma {
     id?: number
     name: string
     clientId: number
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type BrandUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10475,6 +10475,7 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
     clientId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10489,10 +10490,10 @@ export namespace Prisma {
     links?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    brand: BrandCreateNestedOneWithoutTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
-    assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
     harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutTaskInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
+    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
+    brand: BrandCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateInput = {
@@ -10522,10 +10523,10 @@ export namespace Prisma {
     links?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
-    assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
     harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutTaskNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
+    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateInput = {
@@ -10596,8 +10597,8 @@ export namespace Prisma {
     lockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    task: TaskCreateNestedOneWithoutHarmonogramBlocksInput
     user: UserCreateNestedOneWithoutHarmonogramBlocksInput
+    task: TaskCreateNestedOneWithoutHarmonogramBlocksInput
   }
 
   export type HarmonogramBlockUncheckedCreateInput = {
@@ -10619,8 +10620,8 @@ export namespace Prisma {
     lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    task?: TaskUpdateOneRequiredWithoutHarmonogramBlocksNestedInput
     user?: UserUpdateOneRequiredWithoutHarmonogramBlocksNestedInput
+    task?: TaskUpdateOneRequiredWithoutHarmonogramBlocksNestedInput
   }
 
   export type HarmonogramBlockUncheckedUpdateInput = {
@@ -10742,13 +10743,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type EnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
-  }
-
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | null
@@ -10771,9 +10765,10 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type DepartmentNullableScalarRelationFilter = {
-    is?: DepartmentWhereInput | null
-    isNot?: DepartmentWhereInput | null
+  export type HarmonogramBlockListRelationFilter = {
+    every?: HarmonogramBlockWhereInput
+    some?: HarmonogramBlockWhereInput
+    none?: HarmonogramBlockWhereInput
   }
 
   export type TaskListRelationFilter = {
@@ -10782,10 +10777,9 @@ export namespace Prisma {
     none?: TaskWhereInput
   }
 
-  export type HarmonogramBlockListRelationFilter = {
-    every?: HarmonogramBlockWhereInput
-    some?: HarmonogramBlockWhereInput
-    none?: HarmonogramBlockWhereInput
+  export type DepartmentNullableScalarRelationFilter = {
+    is?: DepartmentWhereInput | null
+    isNot?: DepartmentWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -10793,11 +10787,11 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type TaskOrderByRelationAggregateInput = {
+  export type HarmonogramBlockOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type HarmonogramBlockOrderByRelationAggregateInput = {
+  export type TaskOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10875,16 +10869,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11012,6 +10996,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clientId?: SortOrder
+    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11025,6 +11010,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clientId?: SortOrder
+    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11033,6 +11019,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     clientId?: SortOrder
+    color?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11078,9 +11065,9 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type BrandScalarRelationFilter = {
-    is?: BrandWhereInput
-    isNot?: BrandWhereInput
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
   }
 
   export type UserScalarRelationFilter = {
@@ -11088,9 +11075,9 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
-  export type UserNullableScalarRelationFilter = {
-    is?: UserWhereInput | null
-    isNot?: UserWhereInput | null
+  export type BrandScalarRelationFilter = {
+    is?: BrandWhereInput
+    isNot?: BrandWhereInput
   }
 
   export type TaskCountOrderByAggregateInput = {
@@ -11301,10 +11288,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type DepartmentCreateNestedOneWithoutUsersInput = {
-    create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
-    connect?: DepartmentWhereUniqueInput
+  export type HarmonogramBlockCreateNestedManyWithoutUserInput = {
+    create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
+    createMany?: HarmonogramBlockCreateManyUserInputEnvelope
+    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
   }
 
   export type TaskCreateNestedManyWithoutAssignedToInput = {
@@ -11321,7 +11309,13 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
-  export type HarmonogramBlockCreateNestedManyWithoutUserInput = {
+  export type DepartmentCreateNestedOneWithoutUsersInput = {
+    create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
+    connect?: DepartmentWhereUniqueInput
+  }
+
+  export type HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
     connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
     createMany?: HarmonogramBlockCreateManyUserInputEnvelope
@@ -11342,33 +11336,26 @@ export namespace Prisma {
     connect?: TaskWhereUniqueInput | TaskWhereUniqueInput[]
   }
 
-  export type HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
-    createMany?: HarmonogramBlockCreateManyUserInputEnvelope
-    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-  }
-
   export type StringFieldUpdateOperationsInput = {
     set?: string
-  }
-
-  export type EnumUserRoleFieldUpdateOperationsInput = {
-    set?: $Enums.UserRole
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
 
-  export type DepartmentUpdateOneWithoutUsersNestedInput = {
-    create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
-    connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
-    upsert?: DepartmentUpsertWithoutUsersInput
-    disconnect?: DepartmentWhereInput | boolean
-    delete?: DepartmentWhereInput | boolean
-    connect?: DepartmentWhereUniqueInput
-    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutUsersInput, DepartmentUpdateWithoutUsersInput>, DepartmentUncheckedUpdateWithoutUsersInput>
+  export type HarmonogramBlockUpdateManyWithoutUserNestedInput = {
+    create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
+    upsert?: HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput | HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: HarmonogramBlockCreateManyUserInputEnvelope
+    set?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    disconnect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    delete?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    update?: HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput | HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: HarmonogramBlockUpdateManyWithWhereWithoutUserInput | HarmonogramBlockUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
   }
 
   export type TaskUpdateManyWithoutAssignedToNestedInput = {
@@ -11399,18 +11386,14 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
-  export type HarmonogramBlockUpdateManyWithoutUserNestedInput = {
-    create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
-    upsert?: HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput | HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: HarmonogramBlockCreateManyUserInputEnvelope
-    set?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    disconnect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    delete?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    update?: HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput | HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: HarmonogramBlockUpdateManyWithWhereWithoutUserInput | HarmonogramBlockUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
+  export type DepartmentUpdateOneWithoutUsersNestedInput = {
+    create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
+    upsert?: DepartmentUpsertWithoutUsersInput
+    disconnect?: DepartmentWhereInput | boolean
+    delete?: DepartmentWhereInput | boolean
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutUsersInput, DepartmentUpdateWithoutUsersInput>, DepartmentUncheckedUpdateWithoutUsersInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11427,6 +11410,20 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
+    upsert?: HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput | HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: HarmonogramBlockCreateManyUserInputEnvelope
+    set?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    disconnect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    delete?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+    update?: HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput | HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: HarmonogramBlockUpdateManyWithWhereWithoutUserInput | HarmonogramBlockUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
   }
 
   export type TaskUncheckedUpdateManyWithoutAssignedToNestedInput = {
@@ -11455,20 +11452,6 @@ export namespace Prisma {
     update?: TaskUpdateWithWhereUniqueWithoutCreatedByInput | TaskUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: TaskUpdateManyWithWhereWithoutCreatedByInput | TaskUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
-  }
-
-  export type HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput> | HarmonogramBlockCreateWithoutUserInput[] | HarmonogramBlockUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutUserInput | HarmonogramBlockCreateOrConnectWithoutUserInput[]
-    upsert?: HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput | HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: HarmonogramBlockCreateManyUserInputEnvelope
-    set?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    disconnect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    delete?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
-    update?: HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput | HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: HarmonogramBlockUpdateManyWithWhereWithoutUserInput | HarmonogramBlockUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutDepartmentInput = {
@@ -11611,16 +11594,11 @@ export namespace Prisma {
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
   }
 
-  export type BrandCreateNestedOneWithoutTasksInput = {
-    create?: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
-    connectOrCreate?: BrandCreateOrConnectWithoutTasksInput
-    connect?: BrandWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutCreatedTasksInput = {
-    create?: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTasksInput
-    connect?: UserWhereUniqueInput
+  export type HarmonogramBlockCreateNestedManyWithoutTaskInput = {
+    create?: XOR<HarmonogramBlockCreateWithoutTaskInput, HarmonogramBlockUncheckedCreateWithoutTaskInput> | HarmonogramBlockCreateWithoutTaskInput[] | HarmonogramBlockUncheckedCreateWithoutTaskInput[]
+    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutTaskInput | HarmonogramBlockCreateOrConnectWithoutTaskInput[]
+    createMany?: HarmonogramBlockCreateManyTaskInputEnvelope
+    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
   }
 
   export type UserCreateNestedOneWithoutAssignedTasksInput = {
@@ -11629,11 +11607,16 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type HarmonogramBlockCreateNestedManyWithoutTaskInput = {
-    create?: XOR<HarmonogramBlockCreateWithoutTaskInput, HarmonogramBlockUncheckedCreateWithoutTaskInput> | HarmonogramBlockCreateWithoutTaskInput[] | HarmonogramBlockUncheckedCreateWithoutTaskInput[]
-    connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutTaskInput | HarmonogramBlockCreateOrConnectWithoutTaskInput[]
-    createMany?: HarmonogramBlockCreateManyTaskInputEnvelope
-    connect?: HarmonogramBlockWhereUniqueInput | HarmonogramBlockWhereUniqueInput[]
+  export type UserCreateNestedOneWithoutCreatedTasksInput = {
+    create?: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedTasksInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BrandCreateNestedOneWithoutTasksInput = {
+    create?: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: BrandCreateOrConnectWithoutTasksInput
+    connect?: BrandWhereUniqueInput
   }
 
   export type HarmonogramBlockUncheckedCreateNestedManyWithoutTaskInput = {
@@ -11659,32 +11642,6 @@ export namespace Prisma {
     set?: Date | string | null
   }
 
-  export type BrandUpdateOneRequiredWithoutTasksNestedInput = {
-    create?: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
-    connectOrCreate?: BrandCreateOrConnectWithoutTasksInput
-    upsert?: BrandUpsertWithoutTasksInput
-    connect?: BrandWhereUniqueInput
-    update?: XOR<XOR<BrandUpdateToOneWithWhereWithoutTasksInput, BrandUpdateWithoutTasksInput>, BrandUncheckedUpdateWithoutTasksInput>
-  }
-
-  export type UserUpdateOneRequiredWithoutCreatedTasksNestedInput = {
-    create?: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutCreatedTasksInput
-    upsert?: UserUpsertWithoutCreatedTasksInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedTasksInput, UserUpdateWithoutCreatedTasksInput>, UserUncheckedUpdateWithoutCreatedTasksInput>
-  }
-
-  export type UserUpdateOneWithoutAssignedTasksNestedInput = {
-    create?: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-    connectOrCreate?: UserCreateOrConnectWithoutAssignedTasksInput
-    upsert?: UserUpsertWithoutAssignedTasksInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedTasksInput, UserUpdateWithoutAssignedTasksInput>, UserUncheckedUpdateWithoutAssignedTasksInput>
-  }
-
   export type HarmonogramBlockUpdateManyWithoutTaskNestedInput = {
     create?: XOR<HarmonogramBlockCreateWithoutTaskInput, HarmonogramBlockUncheckedCreateWithoutTaskInput> | HarmonogramBlockCreateWithoutTaskInput[] | HarmonogramBlockUncheckedCreateWithoutTaskInput[]
     connectOrCreate?: HarmonogramBlockCreateOrConnectWithoutTaskInput | HarmonogramBlockCreateOrConnectWithoutTaskInput[]
@@ -11697,6 +11654,32 @@ export namespace Prisma {
     update?: HarmonogramBlockUpdateWithWhereUniqueWithoutTaskInput | HarmonogramBlockUpdateWithWhereUniqueWithoutTaskInput[]
     updateMany?: HarmonogramBlockUpdateManyWithWhereWithoutTaskInput | HarmonogramBlockUpdateManyWithWhereWithoutTaskInput[]
     deleteMany?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
+  }
+
+  export type UserUpdateOneWithoutAssignedTasksNestedInput = {
+    create?: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAssignedTasksInput
+    upsert?: UserUpsertWithoutAssignedTasksInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedTasksInput, UserUpdateWithoutAssignedTasksInput>, UserUncheckedUpdateWithoutAssignedTasksInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedTasksNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedTasksInput
+    upsert?: UserUpsertWithoutCreatedTasksInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedTasksInput, UserUpdateWithoutCreatedTasksInput>, UserUncheckedUpdateWithoutCreatedTasksInput>
+  }
+
+  export type BrandUpdateOneRequiredWithoutTasksNestedInput = {
+    create?: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
+    connectOrCreate?: BrandCreateOrConnectWithoutTasksInput
+    upsert?: BrandUpsertWithoutTasksInput
+    connect?: BrandWhereUniqueInput
+    update?: XOR<XOR<BrandUpdateToOneWithWhereWithoutTasksInput, BrandUpdateWithoutTasksInput>, BrandUncheckedUpdateWithoutTasksInput>
   }
 
   export type HarmonogramBlockUncheckedUpdateManyWithoutTaskNestedInput = {
@@ -11713,28 +11696,20 @@ export namespace Prisma {
     deleteMany?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
   }
 
-  export type TaskCreateNestedOneWithoutHarmonogramBlocksInput = {
-    create?: XOR<TaskCreateWithoutHarmonogramBlocksInput, TaskUncheckedCreateWithoutHarmonogramBlocksInput>
-    connectOrCreate?: TaskCreateOrConnectWithoutHarmonogramBlocksInput
-    connect?: TaskWhereUniqueInput
-  }
-
   export type UserCreateNestedOneWithoutHarmonogramBlocksInput = {
     create?: XOR<UserCreateWithoutHarmonogramBlocksInput, UserUncheckedCreateWithoutHarmonogramBlocksInput>
     connectOrCreate?: UserCreateOrConnectWithoutHarmonogramBlocksInput
     connect?: UserWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type TaskUpdateOneRequiredWithoutHarmonogramBlocksNestedInput = {
+  export type TaskCreateNestedOneWithoutHarmonogramBlocksInput = {
     create?: XOR<TaskCreateWithoutHarmonogramBlocksInput, TaskUncheckedCreateWithoutHarmonogramBlocksInput>
     connectOrCreate?: TaskCreateOrConnectWithoutHarmonogramBlocksInput
-    upsert?: TaskUpsertWithoutHarmonogramBlocksInput
     connect?: TaskWhereUniqueInput
-    update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutHarmonogramBlocksInput, TaskUpdateWithoutHarmonogramBlocksInput>, TaskUncheckedUpdateWithoutHarmonogramBlocksInput>
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutHarmonogramBlocksNestedInput = {
@@ -11743,6 +11718,14 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutHarmonogramBlocksInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutHarmonogramBlocksInput, UserUpdateWithoutHarmonogramBlocksInput>, UserUncheckedUpdateWithoutHarmonogramBlocksInput>
+  }
+
+  export type TaskUpdateOneRequiredWithoutHarmonogramBlocksNestedInput = {
+    create?: XOR<TaskCreateWithoutHarmonogramBlocksInput, TaskUncheckedCreateWithoutHarmonogramBlocksInput>
+    connectOrCreate?: TaskCreateOrConnectWithoutHarmonogramBlocksInput
+    upsert?: TaskUpsertWithoutHarmonogramBlocksInput
+    connect?: TaskWhereUniqueInput
+    update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutHarmonogramBlocksInput, TaskUpdateWithoutHarmonogramBlocksInput>, TaskUncheckedUpdateWithoutHarmonogramBlocksInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -11768,13 +11751,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringFilter<$PrismaModel> | string
-  }
-
-  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
   export type NestedIntNullableFilter<$PrismaModel = never> = {
@@ -11841,16 +11817,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[]
-    notIn?: $Enums.UserRole[]
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11979,24 +11945,34 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type DepartmentCreateWithoutUsersInput = {
-    name: string
-    color?: string
+  export type HarmonogramBlockCreateWithoutUserInput = {
+    date: Date | string
+    allocatedTime: number
+    isLocked?: boolean
+    lockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    task: TaskCreateNestedOneWithoutHarmonogramBlocksInput
   }
 
-  export type DepartmentUncheckedCreateWithoutUsersInput = {
+  export type HarmonogramBlockUncheckedCreateWithoutUserInput = {
     id?: number
-    name: string
-    color?: string
+    taskId: number
+    date: Date | string
+    allocatedTime: number
+    isLocked?: boolean
+    lockedUntil?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type DepartmentCreateOrConnectWithoutUsersInput = {
-    where: DepartmentWhereUniqueInput
-    create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+  export type HarmonogramBlockCreateOrConnectWithoutUserInput = {
+    where: HarmonogramBlockWhereUniqueInput
+    create: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput>
+  }
+
+  export type HarmonogramBlockCreateManyUserInputEnvelope = {
+    data: HarmonogramBlockCreateManyUserInput | HarmonogramBlockCreateManyUserInput[]
   }
 
   export type TaskCreateWithoutAssignedToInput = {
@@ -12009,9 +11985,9 @@ export namespace Prisma {
     links?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    brand: BrandCreateNestedOneWithoutTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
     harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutTaskInput
+    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
+    brand: BrandCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateWithoutAssignedToInput = {
@@ -12049,9 +12025,9 @@ export namespace Prisma {
     links?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    brand: BrandCreateNestedOneWithoutTasksInput
-    assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
     harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutTaskInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
+    brand: BrandCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateWithoutCreatedByInput = {
@@ -12079,60 +12055,55 @@ export namespace Prisma {
     data: TaskCreateManyCreatedByInput | TaskCreateManyCreatedByInput[]
   }
 
-  export type HarmonogramBlockCreateWithoutUserInput = {
-    date: Date | string
-    allocatedTime: number
-    isLocked?: boolean
-    lockedUntil?: Date | string | null
+  export type DepartmentCreateWithoutUsersInput = {
+    name: string
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    task: TaskCreateNestedOneWithoutHarmonogramBlocksInput
   }
 
-  export type HarmonogramBlockUncheckedCreateWithoutUserInput = {
+  export type DepartmentUncheckedCreateWithoutUsersInput = {
     id?: number
-    taskId: number
-    date: Date | string
-    allocatedTime: number
-    isLocked?: boolean
-    lockedUntil?: Date | string | null
+    name: string
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type HarmonogramBlockCreateOrConnectWithoutUserInput = {
+  export type DepartmentCreateOrConnectWithoutUsersInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+  }
+
+  export type HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput = {
     where: HarmonogramBlockWhereUniqueInput
+    update: XOR<HarmonogramBlockUpdateWithoutUserInput, HarmonogramBlockUncheckedUpdateWithoutUserInput>
     create: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput>
   }
 
-  export type HarmonogramBlockCreateManyUserInputEnvelope = {
-    data: HarmonogramBlockCreateManyUserInput | HarmonogramBlockCreateManyUserInput[]
+  export type HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput = {
+    where: HarmonogramBlockWhereUniqueInput
+    data: XOR<HarmonogramBlockUpdateWithoutUserInput, HarmonogramBlockUncheckedUpdateWithoutUserInput>
   }
 
-  export type DepartmentUpsertWithoutUsersInput = {
-    update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
-    create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
-    where?: DepartmentWhereInput
+  export type HarmonogramBlockUpdateManyWithWhereWithoutUserInput = {
+    where: HarmonogramBlockScalarWhereInput
+    data: XOR<HarmonogramBlockUpdateManyMutationInput, HarmonogramBlockUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type DepartmentUpdateToOneWithWhereWithoutUsersInput = {
-    where?: DepartmentWhereInput
-    data: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type DepartmentUpdateWithoutUsersInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DepartmentUncheckedUpdateWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  export type HarmonogramBlockScalarWhereInput = {
+    AND?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
+    OR?: HarmonogramBlockScalarWhereInput[]
+    NOT?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
+    id?: IntFilter<"HarmonogramBlock"> | number
+    taskId?: IntFilter<"HarmonogramBlock"> | number
+    userId?: IntFilter<"HarmonogramBlock"> | number
+    date?: DateTimeFilter<"HarmonogramBlock"> | Date | string
+    allocatedTime?: FloatFilter<"HarmonogramBlock"> | number
+    isLocked?: BoolFilter<"HarmonogramBlock"> | boolean
+    lockedUntil?: DateTimeNullableFilter<"HarmonogramBlock"> | Date | string | null
+    createdAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
+    updatedAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
   }
 
   export type TaskUpsertWithWhereUniqueWithoutAssignedToInput = {
@@ -12186,47 +12157,42 @@ export namespace Prisma {
     data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutCreatedByInput>
   }
 
-  export type HarmonogramBlockUpsertWithWhereUniqueWithoutUserInput = {
-    where: HarmonogramBlockWhereUniqueInput
-    update: XOR<HarmonogramBlockUpdateWithoutUserInput, HarmonogramBlockUncheckedUpdateWithoutUserInput>
-    create: XOR<HarmonogramBlockCreateWithoutUserInput, HarmonogramBlockUncheckedCreateWithoutUserInput>
+  export type DepartmentUpsertWithoutUsersInput = {
+    update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
+    create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+    where?: DepartmentWhereInput
   }
 
-  export type HarmonogramBlockUpdateWithWhereUniqueWithoutUserInput = {
-    where: HarmonogramBlockWhereUniqueInput
-    data: XOR<HarmonogramBlockUpdateWithoutUserInput, HarmonogramBlockUncheckedUpdateWithoutUserInput>
+  export type DepartmentUpdateToOneWithWhereWithoutUsersInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
   }
 
-  export type HarmonogramBlockUpdateManyWithWhereWithoutUserInput = {
-    where: HarmonogramBlockScalarWhereInput
-    data: XOR<HarmonogramBlockUpdateManyMutationInput, HarmonogramBlockUncheckedUpdateManyWithoutUserInput>
+  export type DepartmentUpdateWithoutUsersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HarmonogramBlockScalarWhereInput = {
-    AND?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
-    OR?: HarmonogramBlockScalarWhereInput[]
-    NOT?: HarmonogramBlockScalarWhereInput | HarmonogramBlockScalarWhereInput[]
-    id?: IntFilter<"HarmonogramBlock"> | number
-    taskId?: IntFilter<"HarmonogramBlock"> | number
-    userId?: IntFilter<"HarmonogramBlock"> | number
-    date?: DateTimeFilter<"HarmonogramBlock"> | Date | string
-    allocatedTime?: FloatFilter<"HarmonogramBlock"> | number
-    isLocked?: BoolFilter<"HarmonogramBlock"> | boolean
-    lockedUntil?: DateTimeNullableFilter<"HarmonogramBlock"> | Date | string | null
-    createdAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
-    updatedAt?: DateTimeFilter<"HarmonogramBlock"> | Date | string
+  export type DepartmentUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateWithoutDepartmentInput = {
     name: string
     email: string
     password: string
-    role?: $Enums.UserRole
+    role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
     assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
     createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -12234,12 +12200,12 @@ export namespace Prisma {
     name: string
     email: string
     password: string
-    role?: $Enums.UserRole
+    role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
     assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
     createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -12275,7 +12241,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    role?: StringFilter<"User"> | string
     departmentId?: IntNullableFilter<"User"> | number | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -12283,6 +12249,7 @@ export namespace Prisma {
 
   export type BrandCreateWithoutClientInput = {
     name: string
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     tasks?: TaskCreateNestedManyWithoutBrandInput
@@ -12291,6 +12258,7 @@ export namespace Prisma {
   export type BrandUncheckedCreateWithoutClientInput = {
     id?: number
     name: string
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     tasks?: TaskUncheckedCreateNestedManyWithoutBrandInput
@@ -12328,6 +12296,7 @@ export namespace Prisma {
     id?: IntFilter<"Brand"> | number
     name?: StringFilter<"Brand"> | string
     clientId?: IntFilter<"Brand"> | number
+    color?: StringFilter<"Brand"> | string
     createdAt?: DateTimeFilter<"Brand"> | Date | string
     updatedAt?: DateTimeFilter<"Brand"> | Date | string
   }
@@ -12360,9 +12329,9 @@ export namespace Prisma {
     links?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
-    assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
     harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutTaskInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
+    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
   }
 
   export type TaskUncheckedCreateWithoutBrandInput = {
@@ -12430,86 +12399,6 @@ export namespace Prisma {
     data: XOR<TaskUpdateManyMutationInput, TaskUncheckedUpdateManyWithoutBrandInput>
   }
 
-  export type BrandCreateWithoutTasksInput = {
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    client: ClientCreateNestedOneWithoutBrandsInput
-  }
-
-  export type BrandUncheckedCreateWithoutTasksInput = {
-    id?: number
-    name: string
-    clientId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type BrandCreateOrConnectWithoutTasksInput = {
-    where: BrandWhereUniqueInput
-    create: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
-  }
-
-  export type UserCreateWithoutCreatedTasksInput = {
-    name: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    department?: DepartmentCreateNestedOneWithoutUsersInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutCreatedTasksInput = {
-    id?: number
-    name: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    departmentId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutCreatedTasksInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-  }
-
-  export type UserCreateWithoutAssignedTasksInput = {
-    name: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    department?: DepartmentCreateNestedOneWithoutUsersInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutAssignedTasksInput = {
-    id?: number
-    name: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    departmentId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutAssignedTasksInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-  }
-
   export type HarmonogramBlockCreateWithoutTaskInput = {
     date: Date | string
     allocatedTime: number
@@ -12540,102 +12429,86 @@ export namespace Prisma {
     data: HarmonogramBlockCreateManyTaskInput | HarmonogramBlockCreateManyTaskInput[]
   }
 
-  export type BrandUpsertWithoutTasksInput = {
-    update: XOR<BrandUpdateWithoutTasksInput, BrandUncheckedUpdateWithoutTasksInput>
-    create: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
-    where?: BrandWhereInput
+  export type UserCreateWithoutAssignedTasksInput = {
+    name: string
+    email: string
+    password: string
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
   }
 
-  export type BrandUpdateToOneWithWhereWithoutTasksInput = {
-    where?: BrandWhereInput
-    data: XOR<BrandUpdateWithoutTasksInput, BrandUncheckedUpdateWithoutTasksInput>
+  export type UserUncheckedCreateWithoutAssignedTasksInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role?: string
+    departmentId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
   }
 
-  export type BrandUpdateWithoutTasksInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    client?: ClientUpdateOneRequiredWithoutBrandsNestedInput
-  }
-
-  export type BrandUncheckedUpdateWithoutTasksInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    clientId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type UserUpsertWithoutCreatedTasksInput = {
-    update: XOR<UserUpdateWithoutCreatedTasksInput, UserUncheckedUpdateWithoutCreatedTasksInput>
-    create: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutCreatedTasksInput, UserUncheckedUpdateWithoutCreatedTasksInput>
-  }
-
-  export type UserUpdateWithoutCreatedTasksInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    department?: DepartmentUpdateOneWithoutUsersNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutCreatedTasksInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUpsertWithoutAssignedTasksInput = {
-    update: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
+  export type UserCreateOrConnectWithoutAssignedTasksInput = {
+    where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
-    where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
+  export type UserCreateWithoutCreatedTasksInput = {
+    name: string
+    email: string
+    password: string
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
   }
 
-  export type UserUpdateWithoutAssignedTasksInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    department?: DepartmentUpdateOneWithoutUsersNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
+  export type UserUncheckedCreateWithoutCreatedTasksInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role?: string
+    departmentId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedCreateNestedManyWithoutUserInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
   }
 
-  export type UserUncheckedUpdateWithoutAssignedTasksInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
+  export type UserCreateOrConnectWithoutCreatedTasksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
+  }
+
+  export type BrandCreateWithoutTasksInput = {
+    name: string
+    color?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    client: ClientCreateNestedOneWithoutBrandsInput
+  }
+
+  export type BrandUncheckedCreateWithoutTasksInput = {
+    id?: number
+    name: string
+    clientId: number
+    color?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BrandCreateOrConnectWithoutTasksInput = {
+    where: BrandWhereUniqueInput
+    create: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
   }
 
   export type HarmonogramBlockUpsertWithWhereUniqueWithoutTaskInput = {
@@ -12654,6 +12527,136 @@ export namespace Prisma {
     data: XOR<HarmonogramBlockUpdateManyMutationInput, HarmonogramBlockUncheckedUpdateManyWithoutTaskInput>
   }
 
+  export type UserUpsertWithoutAssignedTasksInput = {
+    update: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
+    create: XOR<UserCreateWithoutAssignedTasksInput, UserUncheckedCreateWithoutAssignedTasksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAssignedTasksInput, UserUncheckedUpdateWithoutAssignedTasksInput>
+  }
+
+  export type UserUpdateWithoutAssignedTasksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAssignedTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedTasksInput = {
+    update: XOR<UserUpdateWithoutCreatedTasksInput, UserUncheckedUpdateWithoutCreatedTasksInput>
+    create: XOR<UserCreateWithoutCreatedTasksInput, UserUncheckedCreateWithoutCreatedTasksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedTasksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedTasksInput, UserUncheckedUpdateWithoutCreatedTasksInput>
+  }
+
+  export type UserUpdateWithoutCreatedTasksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+  }
+
+  export type BrandUpsertWithoutTasksInput = {
+    update: XOR<BrandUpdateWithoutTasksInput, BrandUncheckedUpdateWithoutTasksInput>
+    create: XOR<BrandCreateWithoutTasksInput, BrandUncheckedCreateWithoutTasksInput>
+    where?: BrandWhereInput
+  }
+
+  export type BrandUpdateToOneWithWhereWithoutTasksInput = {
+    where?: BrandWhereInput
+    data: XOR<BrandUpdateWithoutTasksInput, BrandUncheckedUpdateWithoutTasksInput>
+  }
+
+  export type BrandUpdateWithoutTasksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    client?: ClientUpdateOneRequiredWithoutBrandsNestedInput
+  }
+
+  export type BrandUncheckedUpdateWithoutTasksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    clientId?: IntFieldUpdateOperationsInput | number
+    color?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutHarmonogramBlocksInput = {
+    name: string
+    email: string
+    password: string
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
+    department?: DepartmentCreateNestedOneWithoutUsersInput
+  }
+
+  export type UserUncheckedCreateWithoutHarmonogramBlocksInput = {
+    id?: number
+    name: string
+    email: string
+    password: string
+    role?: string
+    departmentId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutHarmonogramBlocksInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutHarmonogramBlocksInput, UserUncheckedCreateWithoutHarmonogramBlocksInput>
+  }
+
   export type TaskCreateWithoutHarmonogramBlocksInput = {
     title: string
     description?: string | null
@@ -12664,9 +12667,9 @@ export namespace Prisma {
     links?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    brand: BrandCreateNestedOneWithoutTasksInput
-    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
     assignedTo?: UserCreateNestedOneWithoutAssignedTasksInput
+    createdBy: UserCreateNestedOneWithoutCreatedTasksInput
+    brand: BrandCreateNestedOneWithoutTasksInput
   }
 
   export type TaskUncheckedCreateWithoutHarmonogramBlocksInput = {
@@ -12690,34 +12693,40 @@ export namespace Prisma {
     create: XOR<TaskCreateWithoutHarmonogramBlocksInput, TaskUncheckedCreateWithoutHarmonogramBlocksInput>
   }
 
-  export type UserCreateWithoutHarmonogramBlocksInput = {
-    name: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    department?: DepartmentCreateNestedOneWithoutUsersInput
-    assignedTasks?: TaskCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskCreateNestedManyWithoutCreatedByInput
-  }
-
-  export type UserUncheckedCreateWithoutHarmonogramBlocksInput = {
-    id?: number
-    name: string
-    email: string
-    password: string
-    role?: $Enums.UserRole
-    departmentId?: number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssignedToInput
-    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatedByInput
-  }
-
-  export type UserCreateOrConnectWithoutHarmonogramBlocksInput = {
-    where: UserWhereUniqueInput
+  export type UserUpsertWithoutHarmonogramBlocksInput = {
+    update: XOR<UserUpdateWithoutHarmonogramBlocksInput, UserUncheckedUpdateWithoutHarmonogramBlocksInput>
     create: XOR<UserCreateWithoutHarmonogramBlocksInput, UserUncheckedCreateWithoutHarmonogramBlocksInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutHarmonogramBlocksInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutHarmonogramBlocksInput, UserUncheckedUpdateWithoutHarmonogramBlocksInput>
+  }
+
+  export type UserUpdateWithoutHarmonogramBlocksInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
+    department?: DepartmentUpdateOneWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutHarmonogramBlocksInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
   }
 
   export type TaskUpsertWithoutHarmonogramBlocksInput = {
@@ -12741,9 +12750,9 @@ export namespace Prisma {
     links?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
     assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
+    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutHarmonogramBlocksInput = {
@@ -12762,40 +12771,15 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserUpsertWithoutHarmonogramBlocksInput = {
-    update: XOR<UserUpdateWithoutHarmonogramBlocksInput, UserUncheckedUpdateWithoutHarmonogramBlocksInput>
-    create: XOR<UserCreateWithoutHarmonogramBlocksInput, UserUncheckedCreateWithoutHarmonogramBlocksInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutHarmonogramBlocksInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutHarmonogramBlocksInput, UserUncheckedUpdateWithoutHarmonogramBlocksInput>
-  }
-
-  export type UserUpdateWithoutHarmonogramBlocksInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    department?: DepartmentUpdateOneWithoutUsersNestedInput
-    assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutHarmonogramBlocksInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    departmentId?: NullableIntFieldUpdateOperationsInput | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
-    createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
+  export type HarmonogramBlockCreateManyUserInput = {
+    id?: number
+    taskId: number
+    date: Date | string
+    allocatedTime: number
+    isLocked?: boolean
+    lockedUntil?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type TaskCreateManyAssignedToInput = {
@@ -12828,15 +12812,36 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type HarmonogramBlockCreateManyUserInput = {
-    id?: number
-    taskId: number
-    date: Date | string
-    allocatedTime: number
-    isLocked?: boolean
-    lockedUntil?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
+  export type HarmonogramBlockUpdateWithoutUserInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocatedTime?: FloatFieldUpdateOperationsInput | number
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    task?: TaskUpdateOneRequiredWithoutHarmonogramBlocksNestedInput
+  }
+
+  export type HarmonogramBlockUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocatedTime?: FloatFieldUpdateOperationsInput | number
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HarmonogramBlockUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    taskId?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    allocatedTime?: FloatFieldUpdateOperationsInput | number
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TaskUpdateWithoutAssignedToInput = {
@@ -12849,9 +12854,9 @@ export namespace Prisma {
     links?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
     harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutTaskNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
+    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutAssignedToInput = {
@@ -12895,9 +12900,9 @@ export namespace Prisma {
     links?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
-    assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
     harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutTaskNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
+    brand?: BrandUpdateOneRequiredWithoutTasksNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutCreatedByInput = {
@@ -12931,44 +12936,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type HarmonogramBlockUpdateWithoutUserInput = {
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    allocatedTime?: FloatFieldUpdateOperationsInput | number
-    isLocked?: BoolFieldUpdateOperationsInput | boolean
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    task?: TaskUpdateOneRequiredWithoutHarmonogramBlocksNestedInput
-  }
-
-  export type HarmonogramBlockUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    taskId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    allocatedTime?: FloatFieldUpdateOperationsInput | number
-    isLocked?: BoolFieldUpdateOperationsInput | boolean
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type HarmonogramBlockUncheckedUpdateManyWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    taskId?: IntFieldUpdateOperationsInput | number
-    date?: DateTimeFieldUpdateOperationsInput | Date | string
-    allocatedTime?: FloatFieldUpdateOperationsInput | number
-    isLocked?: BoolFieldUpdateOperationsInput | boolean
-    lockedUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type UserCreateManyDepartmentInput = {
     id?: number
     name: string
     email: string
     password: string
-    role?: $Enums.UserRole
+    role?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12977,12 +12950,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUpdateManyWithoutAssignedToNestedInput
     createdTasks?: TaskUpdateManyWithoutCreatedByNestedInput
-    harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -12990,12 +12963,12 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
     assignedTasks?: TaskUncheckedUpdateManyWithoutAssignedToNestedInput
     createdTasks?: TaskUncheckedUpdateManyWithoutCreatedByNestedInput
-    harmonogramBlocks?: HarmonogramBlockUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -13003,7 +12976,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    role?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13011,12 +12984,14 @@ export namespace Prisma {
   export type BrandCreateManyClientInput = {
     id?: number
     name: string
+    color?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type BrandUpdateWithoutClientInput = {
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tasks?: TaskUpdateManyWithoutBrandNestedInput
@@ -13025,6 +13000,7 @@ export namespace Prisma {
   export type BrandUncheckedUpdateWithoutClientInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tasks?: TaskUncheckedUpdateManyWithoutBrandNestedInput
@@ -13033,6 +13009,7 @@ export namespace Prisma {
   export type BrandUncheckedUpdateManyWithoutClientInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13062,9 +13039,9 @@ export namespace Prisma {
     links?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
-    assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
     harmonogramBlocks?: HarmonogramBlockUpdateManyWithoutTaskNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedTasksNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
   }
 
   export type TaskUncheckedUpdateWithoutBrandInput = {

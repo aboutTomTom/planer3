@@ -99,7 +99,8 @@ const TimeThresholdSlider: React.FC<TimeThresholdSliderProps> = ({
     updatedThresholds[2].max = newValues[2];
     
     updatedThresholds[3].min = newValues[2];
-    updatedThresholds[3].max = max;
+    // Zawsze ustawiaj maksymalną wartość dla poziomu krytycznego na bardzo wysoką wartość
+    updatedThresholds[3].max = 10000000;
     
     onChange(updatedThresholds);
   };

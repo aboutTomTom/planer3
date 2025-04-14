@@ -144,6 +144,7 @@ exports.Prisma.BrandScalarFieldEnum = {
   id: 'id',
   name: 'name',
   clientId: 'clientId',
+  color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -192,11 +193,7 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.UserRole = exports.$Enums.UserRole = {
-  ADMIN: 'ADMIN',
-  EDITOR: 'EDITOR',
-  VIEWER: 'VIEWER'
-};
+
 
 exports.Prisma.ModelName = {
   User: 'User',

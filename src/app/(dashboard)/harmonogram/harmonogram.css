@@ -98,7 +98,7 @@ th {
 td:first-child {
   position: sticky;
   left: 0;
-  background-color: white;
+ /*  background-color: white; */
   z-index: 10;
   border-right: 1px solid #e5e9f2;
   font-weight: 500;
@@ -229,7 +229,9 @@ td:first-child {
   line-height: 1.2;
   border-left-width: 3px !important;
   background-image: linear-gradient(to right, rgba(255,255,255,0.8), rgba(255,255,255,1));
-  margin: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .draggable-item:hover {

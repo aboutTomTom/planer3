@@ -149,7 +149,7 @@ const DraggableTaskItem = ({ task, id, type }: { task: Task; id: number; type: s
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={`p-1.5 rounded-md bg-white border draggable-item draggable-transition ${priorityColor} ${isDragging ? 'opacity-50 shadow-lg' : 'hover:shadow-md'}`}
+      className={`p-1.5 rounded-md bg-white border draggable-item draggable-transition ${priorityColor} ${isDragging ? 'opacity-50 shadow-lg' : 'hover:shadow-md'} mt-0.5`}
       style={{ touchAction: 'none' }}
       onMouseDown={preventTextSelection}
       data-draggable="true"
@@ -238,7 +238,7 @@ const UnassignedDroppablePanel = ({
   return (
     <div 
       ref={setNodeRef}
-      className={`space-y-1 max-h-[calc(100vh-200px)] overflow-y-auto p-2 
+      className={`space-y-1 max-h-[65vh] overflow-y-auto p-2 
         border border-dashed rounded-md transition-all duration-200
         ${isOver ? 'border-primary-color bg-blue-50' : 'border-gray-200'}`}
       style={{ 
@@ -330,6 +330,99 @@ export default function HarmonogramPage() {
     type?: string;
   } | null>(null);
 
+  // Stany dla sortowania
+  const [sortField, setSortField] = useState<'name' | 'department' | 'workload' | string>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  
+  // Funkcja pomocnicza do zmiany sortowania
+  const handleSort = (field: 'name' | 'department' | 'workload' | string) => {
+    if (sortField === field) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+  
+  // Funkcja do sortowania według obciążenia w konkretnym dniu
+  const handleDaySort = (date: string) => {
+    const fieldName = `workload_${date}`;
+    setSelectedDate(date);
+    handleSort(fieldName);
+  };
+
+  // Filtrowanie i sortowanie użytkowników
+  const filteredAndSortedUsers = useMemo(() => {
+    // Najpierw filtrujemy użytkowników
+    let result = users;
+    
+    if (selectedUserId) {
+      result = result.filter(user => user.id === selectedUserId);
+    } else if (selectedDepartmentId) {
+      result = result.filter(user => user.departmentId === selectedDepartmentId);
+    }
+    
+    // Następnie sortujemy według wybranego pola
+    return [...result].sort((a, b) => {
+      if (sortField === 'name') {
+        return sortDirection === 'asc' 
+          ? a.name.localeCompare(b.name) 
+          : b.name.localeCompare(a.name);
+      } 
+      
+      if (sortField === 'department') {
+        // Znajdź nazwy działów dla użytkowników
+        const deptA = departments.find(d => d.id === a.departmentId)?.name || '';
+        const deptB = departments.find(d => d.id === b.departmentId)?.name || '';
+        
+        return sortDirection === 'asc'
+          ? deptA.localeCompare(deptB)
+          : deptB.localeCompare(deptA);
+      }
+      
+      if (sortField === 'workload') {
+        // Oblicz łączne obciążenie dla bieżącego tygodnia
+        const getTotalWorkload = (userId: number) => {
+          return taskBlocks
+            .filter(block => block.userId === userId)
+            .reduce((sum, block) => sum + block.allocatedTime, 0);
+        };
+        
+        const workloadA = getTotalWorkload(a.id);
+        const workloadB = getTotalWorkload(b.id);
+        
+        return sortDirection === 'asc'
+          ? workloadA - workloadB
+          : workloadB - workloadA;
+      }
+      
+      // Sprawdź, czy sortujemy według obciążenia w konkretnym dniu
+      if (sortField.startsWith('workload_')) {
+        const dateToSort = sortField.replace('workload_', '');
+        
+        // Oblicz obciążenie dla konkretnego dnia
+        const getDayWorkload = (userId: number, date: string) => {
+          return taskBlocks
+            .filter(block => 
+              block.userId === userId && 
+              format(new Date(block.date), 'yyyy-MM-dd') === date
+            )
+            .reduce((sum, block) => sum + block.allocatedTime, 0);
+        };
+        
+        const dayWorkloadA = getDayWorkload(a.id, dateToSort);
+        const dayWorkloadB = getDayWorkload(b.id, dateToSort);
+        
+        return sortDirection === 'asc'
+          ? dayWorkloadA - dayWorkloadB
+          : dayWorkloadB - dayWorkloadA;
+      }
+      
+      return 0;
+    });
+  }, [users, selectedDepartmentId, selectedUserId, sortField, sortDirection, departments, taskBlocks]);
+
   // Pobieranie danych
   useEffect(() => {
     const fetchData = async () => {
@@ -409,13 +502,6 @@ export default function HarmonogramPage() {
     fetchData();
   }, [currentWeek, weekStart]);
 
-  // Filtrowanie użytkowników wg działu
-  const filteredUsers = useMemo(() => {
-    if (!selectedDepartmentId && !selectedUserId) return users;
-    if (selectedUserId) return users.filter(user => user.id === selectedUserId);
-    return users.filter(user => user.departmentId === selectedDepartmentId);
-  }, [users, selectedDepartmentId, selectedUserId]);
-
   // Filtrowanie nieprzypisanych zadań
   const filteredUnassignedTasks = unassignedTasks.filter(task => 
     searchQuery === '' || 
@@ -427,6 +513,13 @@ export default function HarmonogramPage() {
   const resetFilters = () => {
     setSelectedDepartmentId(null);
     setSelectedUserId(null);
+  };
+  
+  // Resetowanie sortowania
+  const resetSort = () => {
+    setSortField('name');
+    setSortDirection('asc');
+    setSelectedDate(null);
   };
 
   // Obsługa rozpoczęcia przeciągania
@@ -575,7 +668,7 @@ export default function HarmonogramPage() {
   const TaskDragItem = ({ task }: { task: Task }) => (
     <div 
       className={`p-1.5 rounded-md bg-white border shadow-sm draggable-item w-52 ${getPriorityColor(task.priority)}`}
-      style={{ touchAction: 'none' }}
+      style={{ touchAction: 'none'}}
       data-draggable="true"
     >
       <div className="font-medium text-xs">{task.title}</div>
@@ -669,7 +762,7 @@ export default function HarmonogramPage() {
   };
 
   return (
-    <div className="bg-background-color min-h-screen">
+    <div className="bg-background-color ">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -879,10 +972,82 @@ export default function HarmonogramPage() {
                     Wyczyść filtry
                   </button>
                 )}
+                
+                {/* Sortowanie */}
+                <div className="relative ml-2 flex items-center">
+                  <button 
+                    className="px-2 py-1 text-xs border border-gray-200 rounded flex items-center"
+                    onClick={() => document.getElementById('sortDropdown')?.classList.toggle('hidden')}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                    Sortowanie: {sortField === 'name' ? 'Imię' : sortField === 'department' ? 'Dział' : sortField === 'workload' ? 'Obciążenie' : 'Dzień'}
+                    {sortDirection === 'asc' ? ' ↑' : ' ↓'}
+                  </button>
+                  
+                  <div 
+                    id="sortDropdown" 
+                    className="absolute right-0 top-8 z-50 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg hidden"
+                  >
+                    <div className="p-2 space-y-1">
+                      <div 
+                        className={`py-1 px-2 hover:bg-gray-100 cursor-pointer text-xs rounded flex justify-between items-center ${sortField === 'name' ? 'bg-blue-50 text-blue-600' : ''}`}
+                        onClick={() => {
+                          handleSort('name');
+                          document.getElementById('sortDropdown')?.classList.add('hidden');
+                        }}
+                      >
+                        <span>Imię i nazwisko</span>
+                        {sortField === 'name' && (
+                          <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </div>
+                      
+                      <div 
+                        className={`py-1 px-2 hover:bg-gray-100 cursor-pointer text-xs rounded flex justify-between items-center ${sortField === 'department' ? 'bg-blue-50 text-blue-600' : ''}`}
+                        onClick={() => {
+                          handleSort('department');
+                          document.getElementById('sortDropdown')?.classList.add('hidden');
+                        }}
+                      >
+                        <span>Dział</span>
+                        {sortField === 'department' && (
+                          <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </div>
+                      
+                      <div 
+                        className={`py-1 px-2 hover:bg-gray-100 cursor-pointer text-xs rounded flex justify-between items-center ${sortField === 'workload' ? 'bg-blue-50 text-blue-600' : ''}`}
+                        onClick={() => {
+                          handleSort('workload');
+                          document.getElementById('sortDropdown')?.classList.add('hidden');
+                        }}
+                      >
+                        <span>Obciążenie (cały tydzień)</span>
+                        {sortField === 'workload' && (
+                          <span>{sortDirection === 'asc' ? '↑' : '↓'}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {sortField !== 'name' && (
+                    <button 
+                      className="ml-1 px-2 py-1 text-xs border border-gray-200 rounded text-blue-500 hover:bg-blue-50 flex items-center"
+                      onClick={resetSort}
+                      title="Resetuj sortowanie"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
               </div>
               
               {/* Tabela harmonogramu */}
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto max-h-[70vh]">
                 <div className="align-middle">
                   {isLoading ? (
                     <div className="p-3 text-center text-xs text-gray-500">Ładowanie danych...</div>
@@ -905,20 +1070,36 @@ export default function HarmonogramPage() {
                                 <span className={`text-sm font-bold ${day.isToday ? 'text-blue-600' : 'text-gray-700'}`}>
                                   {day.dayOfMonth}.{format(day.date, 'MM.yyyy')}
                                 </span>
+                                
+                                {/* Przycisk sortowania według dnia */}
+                                <button 
+                                  className={`mt-1 text-xs flex items-center px-1.5 py-0.5 rounded ${
+                                    sortField === `workload_${format(day.date, 'yyyy-MM-dd')}` 
+                                      ? 'bg-blue-100 text-blue-700' 
+                                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                  }`}
+                                  onClick={() => handleDaySort(format(day.date, 'yyyy-MM-dd'))}
+                                  title="Sortuj według obciążenia w tym dniu"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                  </svg>
+                                  Sortuj {sortField === `workload_${format(day.date, 'yyyy-MM-dd')}` && (sortDirection === 'asc' ? '↑' : '↓')}
+                                </button>
                               </div>
                             </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 bg-white">
-                        {filteredUsers.length === 0 ? (
+                        {filteredAndSortedUsers.length === 0 ? (
                           <tr>
                             <td colSpan={weekDays.length + 1} className="py-3 text-center text-xs text-gray-500">
                               Brak danych do wyświetlenia
                             </td>
                           </tr>
                         ) : (
-                          filteredUsers.map((user, userIndex) => {
+                          filteredAndSortedUsers.map((user, userIndex) => {
                             // Znajdź dział użytkownika
                             const userDept = departments.find(d => d.id === user.departmentId);
                             const deptColor = userDept?.color || '#f8f9fa';
@@ -950,7 +1131,7 @@ export default function HarmonogramPage() {
                                   let thresholdClass = '';
                                   for (const threshold of config.timeThresholds) {
                                     if (totalTime >= threshold.min && 
-                                        (threshold.max === null || totalTime < threshold.max)) {
+                                        (threshold.max === null || totalTime < threshold.max || threshold.max > 1000)) {
                                       if (threshold.name === 'low') thresholdClass = 'green-500';
                                       else if (threshold.name === 'medium') thresholdClass = 'yellow-500';
                                       else if (threshold.name === 'high') thresholdClass = 'orange-500';
