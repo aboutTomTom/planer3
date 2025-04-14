@@ -15,18 +15,20 @@ export interface AppConfig {
   timeThresholds: TimeThreshold[];
   displayedDays: number[];
   version?: string; // Informacja o wersji konfiguracji
+  source?: 'db' | 'localStorage' | 'default'; // Informacja o źródle danych
 }
 
 // Domyślna konfiguracja
 const defaultConfig: AppConfig = {
   timeThresholds: [
-    { name: "low", min: 0, max: 5, color: "#42B983" },    // zielony dla <5h
-    { name: "medium", min: 5, max: 7, color: "#FFAB00" }, // żółty dla 5-7h
-    { name: "high", min: 7, max: 8, color: "#FF9800" },   // pomarańczowy dla 7-8h
-    { name: "critical", min: 8, max: 12, color: "#E9546B" } // czerwony dla >8h
+    { name: "low", min: 0, max: 4, color: "#74e458" },    // zielony dla <4h
+    { name: "medium", min: 4, max: 6, color: "#d7f350" }, // żółty dla 4-6h
+    { name: "high", min: 6, max: 8, color: "#FF9800" },   // pomarańczowy dla 6-8h
+    { name: "critical", min: 8, max: 10000000, color: "#cb2b2b" } // czerwony dla >8h
   ],
   displayedDays: [1, 2, 3, 4, 5], // Domyślnie dni od poniedziałku do piątku
-  version: 'default.1.0' // Oznaczenie domyślnej konfiguracji
+  version: 'default.1.0', // Oznaczenie domyślnej konfiguracji
+  source: 'default' // Oznaczenie źródła jako domyślne
 };
 
 // Interfejs kontekstu
@@ -71,6 +73,9 @@ const validateConfig = (config: any): AppConfig => {
     }
   }
   
+  // Zachowaj informację o źródle danych
+  validConfig.source = config.source || 'default';
+  
   // Dodaj informację o wersji
   validConfig.version = config.version || 'validated.' + Date.now();
   
@@ -107,8 +112,8 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
       const data = await response.json();
       console.log('Received configuration:', data);
       
-      // Waliduj otrzymaną konfigurację
-      const validatedConfig = validateConfig(data);
+      // Waliduj otrzymaną konfigurację i oznacz jako pochodzącą z bazy danych
+      const validatedConfig = validateConfig({...data, source: 'db'});
       console.log('Validated configuration:', validatedConfig);
       
       setConfig(validatedConfig);
@@ -124,17 +129,17 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
       if (storedConfig) {
         try {
           const parsedConfig = JSON.parse(storedConfig);
-          const validatedConfig = validateConfig(parsedConfig);
+          const validatedConfig = validateConfig({...parsedConfig, source: 'localStorage'});
           console.log('Using localStorage config:', validatedConfig);
           setConfig(validatedConfig);
         } catch (e) {
           console.error('Błąd podczas parsowania konfiguracji z localStorage:', e);
           console.log('Using default config');
-          setConfig({...defaultConfig, version: 'default.fallback.' + Date.now()});
+          setConfig({...defaultConfig, version: 'default.fallback.' + Date.now(), source: 'default'});
         }
       } else {
         console.log('No localStorage config, using default');
-        setConfig({...defaultConfig, version: 'default.fallback.' + Date.now()});
+        setConfig({...defaultConfig, version: 'default.fallback.' + Date.now(), source: 'default'});
       }
     } finally {
       setIsLoading(false);
@@ -161,7 +166,8 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
         const newConfig = { 
           ...prevConfig, 
           timeThresholds: thresholds,
-          version: 'updated.' + Date.now() 
+          version: 'updated.' + Date.now(),
+          source: 'localStorage' as const // Jawnie określamy typ
         };
         // Zapisz do localStorage jako kopię
         localStorage.setItem('appConfig', JSON.stringify(newConfig));
@@ -182,6 +188,12 @@ export function AppConfigProvider({ children }: { children: ReactNode }) {
         console.error('API error response:', errorData);
         throw new Error(`Błąd podczas zapisywania progów: ${response.status} - ${errorData.error || 'Unknown error'}`);
       }
+      
+      // Po udanym zapisie do API, zaktualizuj źródło na DB
+      setConfig(prevConfig => ({
+        ...prevConfig,
+        source: 'db' as const
+      }));
       
       return true;
     } catch (error) {
